@@ -13,6 +13,9 @@ class Tag(models.Model):
     # Additional Fields
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This tag has no generated preview</p>')
 
+    def __str__(self):
+        return str(self.tag_id) + '  //  ' + str(self.name)
+
 
 class Creator(models.Model):
     # Standard Fields
@@ -25,6 +28,9 @@ class Creator(models.Model):
     # Additional Fields
     related_creators = models.ManyToManyField('self')
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This creator has no generated preview</p>')
+
+    def __str__(self):
+        return str(self.creator_id) + '  //  ' + str(self.name)
 
 
 class Content(models.Model):
@@ -51,7 +57,18 @@ class Content(models.Model):
     liked_by = models.ManyToManyField(User, related_name='content_liked_by')
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This content has no generated preview</p>')
 
+    def __str__(self):
+        return str(self.content_type) + '  //  ' + str(self.title)
+
 
 class Collection(models.Model):
+    name = models.CharField(max_length=255)
+    owners = models.ManyToManyField(User, related_name='collection_owners')
+    restricted_access = models.BooleanField(default=False)
+    can_access = models.ManyToManyField(User, related_name='collection_can_access')
+    content = models.ManyToManyField(Content, related_name='collection_content')
     related_collections = models.ManyToManyField('self')
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This collection has no generated preview</p>')
+
+    def __str__(self):
+        return str(self.name)
