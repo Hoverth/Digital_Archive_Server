@@ -11,7 +11,16 @@ This Django app holds the interfaces used to serve and sort content to the web.
 It is stored under `DigitalArchiveServer/ContentViewer`.
 It is served under `/`.
 
+#### Views
+ - `/` - A customizable view that points to any other view as the server's index page
+ - `/content` - A ListView that shows all content archived by the server
+ - `/content/[content-id]` - A DetailView that shows the details of the content
+
 ### Archivers
 This django app contains the interfaces used to archive and store new content.
 It is stored under `DigitalArchiveServer/Archivers`
-It is served under `/archivers/`
+It is served under `/archivers`
+
+#### Views
+ - `/archivers` - A list of all available archivers
+ - `/archivers/[archiver-id]` - A DetailView on that archiver
