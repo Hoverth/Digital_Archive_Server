@@ -8,8 +8,10 @@ The Django Project is stored under the `DigitalArchiveServer` directory.
 ## Components
 ### Content Viewer
 This Django app holds the interfaces used to serve and sort content to the web. 
-It is stored under `DigitalArchiveServer/ContentViewer`
+It is stored under `DigitalArchiveServer/ContentViewer`.
+It is served under `/`.
 
 ### Archivers
 This django app contains the interfaces used to archive and store new content.
 It is stored under `DigitalArchiveServer/Archivers`
+It is served under `/archivers/`
