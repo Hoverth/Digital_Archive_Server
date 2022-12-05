@@ -6,6 +6,10 @@ app_name = "ContentViewer"  # {{ url }} needs to have "main:" before the urls na
 urlpatterns = [
     path('', views.ContentListView.as_view(), name='index'),
     path('content/<int:pk>', views.ContentDetailView.as_view(), name='content'),
-    path('tag/<int:pk>', views.TagView.as_view(), name='tag'),
-    path('creator/<int:pk>', views.CreatorView.as_view(), name='creator'),
+    path('tags', views.TagsListView.as_view(), name='tags'),
+    path('tag/0', views.NoTagsDetailsView.as_view(), name='notag'),
+    path('tag/<int:pk>', views.TagDetailsView.as_view(), name='tag'),
+    path('creators', views.CreatorsListView.as_view(), name='creators'),
+    path('creator/0', views.NoCreatorsDetailsView.as_view(), name='nocreator'),
+    path('creator/<int:pk>', views.CreatorDetailsView.as_view(), name='creator'),
 ]

@@ -3,17 +3,18 @@
 {% load static %}
 {% load paginator_tags %}
 
-{% block title %}Index{% endblock %}
+{% block title %}No Creator{% endblock %}
 
 {% block content %}
+    <h1>No creator</h1>
     <div class="item-container">
         {% for content_item in content_list %}
             <div class="item">
                 <a href="{% url 'ContentViewer:content' content_item.id %}">
-                    {{content_item.preview|safe}}
+                    {{ content_item.preview|safe }}
                     <p class="centered">{{ content_item.title }}</p>
                 </a>
-                <p class="centered" class="creators">
+                <p class="centered creators">
                     {% for creator in content_item.creators.all %}
                         <a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}

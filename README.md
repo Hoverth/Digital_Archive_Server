@@ -13,8 +13,14 @@ It is served under `/`.
 
 #### Views
  - `/` - A customizable view that points to any other view as the server's index page
- - `/content` - A ListView that shows all content archived by the server
+ - `/content` - A ListView that shows all content archived by the server, sorted by the time retrieved
  - `/content/[content-id]` - A DetailView that shows the details of the content
+ - `/tags` - A ListView that shows all the tags that the server has indexed, sorted by number of references
+ - `/tags/0` - A ListView that lists the content without any set tags
+ - `/tag/[tag-id]` - A ListView that shows the details of a tag and lists the content with that tag
+ - `/creators` - A ListView that shows all the creators of the content stored by the server, sorted alphabetically
+ - `/creator/0` - A ListView that lists the content without a set creator
+ - `/creator/[creator-id]` - A ListView that shows the details of a creator and lists the content created by that creator
 
 ### Archivers
 This django app contains the interfaces used to archive and store new content.

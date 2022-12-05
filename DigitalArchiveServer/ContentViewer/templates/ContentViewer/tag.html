@@ -19,11 +19,11 @@
                     {{ content_item.preview|safe }}
                     <p class="centered">{{ content_item.title }}</p>
                 </a>
-                <p class="centered" class="creators">
+                <p class="centered creators">
                     {% for creator in content_item.creators.all %}
                         <a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}
-                        No Creators
+                        <a href="{% url 'ContentViewer:nocreator' %}">No Creators</a>
                     {% endfor %}
                     </p>
             </div>

@@ -28,7 +28,17 @@ class ContentDetailView(generic.DetailView):
         return context
 
 
-class TagView(generic.ListView):
+class TagsListView(generic.ListView):
+    template_name = 'ContentViewer/tags.html'
+    context_object_name = 'tag_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        tag_list = Tag.objects.order_by('name')
+        return tag_list
+
+
+class TagDetailsView(generic.ListView):
     template_name = 'ContentViewer/tag.html'
     context_object_name = 'content_list'
     paginate_by = 20
@@ -38,12 +48,32 @@ class TagView(generic.ListView):
         return content_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(TagView, self).get_context_data(**kwargs)
+        context = super(TagDetailsView, self).get_context_data(**kwargs)
         context['tag'] = Tag.objects.filter(id=self.kwargs['pk']).first()
         return context
 
 
-class CreatorView(generic.ListView):
+class NoTagsDetailsView(generic.ListView):
+    template_name = 'ContentViewer/notag.html'
+    context_object_name = 'content_list'
+    paginate_by = 20
+
+    def get_queryset(self, **kwargs):
+        content_list = Content.objects.filter(tags=None).order_by('-time_retrieved')
+        return content_list
+
+
+class CreatorsListView(generic.ListView):
+    template_name = 'ContentViewer/creators.html'
+    context_object_name = 'creator_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        creator_list = Creator.objects.order_by('name')
+        return creator_list
+
+
+class CreatorDetailsView(generic.ListView):
     template_name = 'ContentViewer/creator.html'
     context_object_name = 'content_list'
     paginate_by = 20
@@ -53,6 +83,16 @@ class CreatorView(generic.ListView):
         return content_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CreatorView, self).get_context_data(**kwargs)
+        context = super(CreatorDetailsView, self).get_context_data(**kwargs)
         context['creator'] = Creator.objects.filter(id=self.kwargs['pk']).first()
         return context
+
+
+class NoCreatorsDetailsView(generic.ListView):
+    template_name = 'ContentViewer/nocreator.html'
+    context_object_name = 'content_list'
+    paginate_by = 20
+
+    def get_queryset(self, **kwargs):
+        content_list = Content.objects.filter(creators=None).order_by('-time_retrieved')
+        return content_list

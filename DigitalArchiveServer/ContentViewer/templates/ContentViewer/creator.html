@@ -29,7 +29,7 @@
                     {% for creator in content_item.creators.all %}
                         <a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}
-                        No Creators
+                        <a href="{% url 'ContentViewer:nocreator' %}">No Creators</a>
                     {% endfor %}
                     </p>
             </div>
