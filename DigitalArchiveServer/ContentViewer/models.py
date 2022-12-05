@@ -62,7 +62,7 @@ class Content(models.Model):
 
 
 class Collection(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, default='Collection')
     owners = models.ManyToManyField(User, related_name='collection_owners')
     restricted_access = models.BooleanField(default=False)
     can_access = models.ManyToManyField(User, related_name='collection_can_access')
