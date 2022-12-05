@@ -1,0 +1,90 @@
+body {
+    font-family: monospace;
+    background-color: white;
+    color: black;
+}
+
+.header {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+}
+
+.smalltext {
+    font-size: 12px;
+}
+
+.header a {
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 15px;
+    border-radius: 4px;
+}
+
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header-right {
+    float: right;
+}
+
+.content {
+    padding: 30px;
+}
+
+.centered {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.item-container {
+    display: grid;
+    gap: 20px;
+    grid-template-rows: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.page-container {
+    display: grid;
+    gap: 20px;
+    align: center;
+    grid-template-columns: auto auto auto;
+}
+
+.page {
+    align: center;
+    padding: 20px;
+}
+
+.pagination {
+    font-size: 150%;
+    text-align: center;
+    padding: 10px;
+}
+
+.page-current {
+    font-style: italic;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.preview {
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+    max-width: 100%;
+    width: auto;
+    max-height: 400px;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

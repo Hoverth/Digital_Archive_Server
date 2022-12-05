@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+{% include 'base.css' %}
+    </style>
+    <meta charset="UTF-8">{% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
+    <title>{% block title %}{% endblock %} - Organiser</title>
+</head>
+<body>
+<header class="header">
+    <a href="{% url 'ContentViewer:index' %}" class="logo">Digital Archive</a>
+    <div class="header-right">
+        <a href="{% url 'ContentViewer:index' %}">Index</a>
+    </div>
+</header>
+<div class="content">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{% if content %}{{ content.title }}{% else %}Permission DEnied{% endif %} - Content Details{% endblock %}
+
+{% block content %}{% if content %}<h1>{{ content.title }}</h1>
+<p>
+    Content type: {{ content.content_type }} <br/>
+    Source URL: {{ content.source_url }} <br/>
+    Source ID: {{ content.source_id }} <br/>
+    Creators: {% for creator in content.content_creators.all %}<a href="">{{ creator.name }}</a>,
+    {% empty %}No Creators{% endfor %}<br/>
+    Tags: {% for tag in content.tags.all %}<a href="">{{ tag.name }}</a>, {% empty %}No Tags{% endfor %} <br/>
+    Liked by: {% for user in content.content_liked_by.all %}{{ user.username }} {% empty %}None{% endfor %} <a
+        href="">Favourite</a><br/>
+    Consumed by: {% for user in content.content_seen_by.all %}{{ user.username }}, {% empty %}None{% endfor %}<br/>
+    Content size: {{ content.content_size }} <br/>
+    Content path: {{ content.content_path }} <br/>
+    Time Created: {{ content.time_created }} <br/>
+    Time Retrieved: {{ content.time_retrieved }}<br/>
+    Published on: {{ content.published_date }} <br/>
+    Last Modified: {{ content.last_modified_date }} <br/>
+    Notes: {{ content.notes }}<br/>
+    Content Language: {{ content.language }} <br/>
+    Content Copyright: {{ content.copyright }} <br/>
+    Related Content: {% for content in content.related_content.all %}<a href="">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}
+</p>
+{% else %}
+<h1>Access Denied</h1>
+<p>You don't have permission to view this Obnject!</p>{% endif %}{% endblock %}
