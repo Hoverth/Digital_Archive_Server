@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load paginator_tags %}
+
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block content %}
+    <h1>{{ tag.name }}</h1>
+    <p>
+        Tag ID: {{ tag.tag_id }} <br>
+        Source URL: {{ tag.source_url}} <br>
+        Source ID: {{ tag.source_id }} <br>
+    </p>
+    <div class="item-container">
+        {% for content_item in content_list %}
+            <div class="item">
+                <a href="{% url 'ContentViewer:content' content_item.id %}">
+                    {{ content_item.preview|safe }}
+                    <p class="centered">{{ content_item.title }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for creator in content_item.creators.all %}
+                        <a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>
+                    {% empty %}
+                        No Creators
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No content is available.</p>
+        {% endfor %}
+    </div>
+{% block pagination %}
+{% if is_paginated %}
+    <div class="centred">
+        <p>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</p>
+        <div class="pagination">
+            <span class="page-links">
+                {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                {% for page_number in page_range %}
+                    {% if page_number == page_obj.paginator.ELLIPSIS %}
+                        {{page_number}}
+                    {% else %}
+                        {% if '?' in request.path %}
+                            <a href="{{request.path}}&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% else %}
+                            <a href="{{request.path}}?page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+{% endblock %}

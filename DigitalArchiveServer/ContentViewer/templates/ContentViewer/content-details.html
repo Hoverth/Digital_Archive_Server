@@ -9,9 +9,9 @@
     Content type: {{ content.content_type }} <br/>
     Source URL: {{ content.source_url }} <br/>
     Source ID: {{ content.source_id }} <br/>
-    Creators: {% for creator in content.creators.all %}<a href="">{{ creator.name }}</a>,
+    Creators: {% for creator in content.creators.all %}<a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>,
     {% empty %}No Creators{% endfor %}<br/>
-    Tags: {% for tag in content.tags.all %}<a href="">{{ tag.name }}</a>, {% empty %}No Tags{% endfor %} <br/>
+    Tags: {% for tag in content.tags.all %}<a href="{% url 'ContentViewer:tag' tag.id %}">{{ tag.name }}</a>, {% empty %}No Tags{% endfor %} <br/>
     Seen by: {% for user in content.seen_by.all %}{{ user.username }}, {% empty %}None{% endfor %}<br/>
     Liked by: {% for user in content.liked_by.all %}{{ user.username }}, {% empty %}None{% endfor %} <a href="">Favourite</a><br/>
     Content size: {{ content.content_size }} <br/>
