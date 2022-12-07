@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "1337:80"
+    depends_on:
+      - web
+    volumes:
+      - type: bind
+        source: /srv/digital-archive-server/  # example directory
+        target: /home/digital-archive-server/static
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db
+  web:
+    build: .
+    command: gunicorn DigitalArchiveServer.wsgi:application --bind 0.0.0.0:8000
+    container_name: django_web
+    environment:
+      - DATABASE_URL
+    volumes:
+      - type: bind
+        source: /srv/digital-archive-server/  # example directory
+        target: /home/digital-archive-server/static
+    expose:
+      - 8000
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
