@@ -1,5 +1,8 @@
+import os
+import pathlib
 from django.shortcuts import render
 from .models import Creator, Tag, Content, Collection
+from .settings import STORAGE_DIR
 from django.views import generic
 
 
@@ -13,6 +16,10 @@ class ContentListView(generic.ListView):
         return content_list
 
 
+def get_filepath(file_dictionary):
+    return file_dictionary['path']
+
+
 class ContentDetailView(generic.DetailView):
     model = Content
     template_name = 'ContentViewer/content-details.html'
@@ -24,6 +31,39 @@ class ContentDetailView(generic.DetailView):
         content = context['content']
         content.seen_by.add(self.request.user)
         content.save()
+
+        image_types = ['.gif', '.jpg', '.png']
+        video_types = ['.mp4', '.mkv']
+        text_types = ['.txt']
+
+        files = []
+        if os.path.isdir(os.path.join(STORAGE_DIR, context['object'].files_path)):
+            for file in os.listdir(os.path.join(STORAGE_DIR, context['object'].files_path)):
+                file_out = {
+                    'type': '',
+                    'path': str(context['object'].files_path) + str(file),
+                    'content': None
+                }
+                file_extension = pathlib.Path(str(file)).suffix
+                if file_extension in image_types:
+                    file_out['type'] = 'image'
+
+                if file_extension in video_types:
+                    file_out['type'] = 'video'
+
+                if file_extension in text_types:
+                    file_out['type'] = 'text'
+                    contents = ''
+                    try:
+                        with open(os.path.join(STORAGE_DIR, context['object'].files_path, file), 'r') as infile:
+                            contents = infile.read().replace('\n', '<br>')
+                    except:
+                        contents = 'Error Reading Text File: ' + str(file)
+                    file_out['contents'] = str(contents)
+
+                files.append(file_out)
+        files.sort(key=get_filepath)
+        context['files'] = files
 
         return context
 

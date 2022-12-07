@@ -52,16 +52,25 @@ body {
     grid-template-columns: auto auto auto auto auto;
 }
 
-.page-container {
+.file-container {
     display: grid;
     gap: 20px;
     align: center;
     grid-template-columns: auto auto auto;
 }
 
-.page {
+.file {
     align: center;
     padding: 20px;
+}
+
+.file-image {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .pagination {

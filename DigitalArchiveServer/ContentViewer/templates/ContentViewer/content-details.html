@@ -25,6 +25,26 @@
     Content Copyright: {{ content.copyright }} <br/>
     Related Content: {% for content in content.related_content.all %}<a href="">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}
 </p>
+<div class="file-container">
+    {% for file in files %}
+        <div class="file">
+            {% if file.type == "image" %}
+                <img class="file-image" src="{% static file.path %}"/>
+            {% elif file.type == "video" %}
+                <video controls="controls" src="{% static file.path %}" type="{{ file.mime }}" playsinline="playsinline"
+                       width="1400">
+                    <p>If you are seeing this, the video did not load!</p>
+                </video>
+            {% elif file.contents %}
+                {{ file.contents|safe }}
+            {% else %}
+                {{file.path}} <br/>
+            {% endif %}
+        </div>
+    {% empty %}
+        No viewable files associated with content
+    {% endfor %}
+</div>
 {% else %}
 <h1>Access Denied</h1>
 <p>You don't have permission to view this content!</p>{% endif %}{% endblock %}
