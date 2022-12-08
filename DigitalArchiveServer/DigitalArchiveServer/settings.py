@@ -33,7 +33,7 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]  # trust from the proxy
 # Application definition
 
 INSTALLED_APPS = [
-    'ContentViewer.apps.ContentviewerConfig',
+    'ContentManager.apps.ContentviewerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,3 +128,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = "/home/digital-archive-server/static"

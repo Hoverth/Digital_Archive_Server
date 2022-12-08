@@ -53,6 +53,7 @@ RUN chmod +x  $HOME/entrypoint.sh
 COPY . $HOME
 
 RUN chown -R archive:archive $HOME
+RUN chown -R archive:archive $HOME/static
 
 USER archive
 

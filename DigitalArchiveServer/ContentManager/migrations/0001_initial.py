@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('source_url', models.CharField(max_length=255, null=True)),
                 ('source_id', models.CharField(max_length=255, null=True)),
                 ('preview', models.CharField(default="<p class='preview'>This creator has no generated preview</p>", max_length=512)),
-                ('related_creators', models.ManyToManyField(null=True, related_name='related_creators', to='ContentViewer.creator')),
+                ('related_creators', models.ManyToManyField(null=True, related_name='related_creators', to='ContentManager.creator')),
             ],
         ),
         migrations.CreateModel(
@@ -56,11 +56,11 @@ class Migration(migrations.Migration):
                 ('last_modified_date', models.DateTimeField(auto_now=True)),
                 ('content_size', models.PositiveIntegerField()),
                 ('preview', models.CharField(default="<p class='preview'>This content has no generated preview</p>", max_length=512)),
-                ('creators', models.ManyToManyField(null=True, related_name='content_creators', to='ContentViewer.creator')),
+                ('creators', models.ManyToManyField(null=True, related_name='content_creators', to='ContentManager.creator')),
                 ('liked_by', models.ManyToManyField(related_name='content_liked_by', to=settings.AUTH_USER_MODEL)),
-                ('related_content', models.ManyToManyField(null=True, related_name='related_content', to='ContentViewer.content')),
+                ('related_content', models.ManyToManyField(null=True, related_name='related_content', to='ContentManager.content')),
                 ('seen_by', models.ManyToManyField(related_name='content_seen_by', to=settings.AUTH_USER_MODEL)),
-                ('tags', models.ManyToManyField(null=True, related_name='content_tags', to='ContentViewer.tag')),
+                ('tags', models.ManyToManyField(null=True, related_name='content_tags', to='ContentManager.tag')),
             ],
         ),
         migrations.CreateModel(
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('preview', models.CharField(default="<p class='preview'>This collection has no generated preview</p>", max_length=512)),
-                ('related_collections', models.ManyToManyField(null=True, related_name='related_collections', to='ContentViewer.collection')),
+                ('related_collections', models.ManyToManyField(null=True, related_name='related_collections', to='ContentManager.collection')),
             ],
         ),
     ]

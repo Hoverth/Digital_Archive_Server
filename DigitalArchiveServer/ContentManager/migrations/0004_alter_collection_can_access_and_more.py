@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('ContentViewer', '0003_collection_can_access_collection_content_and_more'),
+        ('ContentManager', '0003_collection_can_access_collection_content_and_more'),
     ]
 
     operations = [
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='collection',
             name='related_collections',
-            field=models.ManyToManyField(blank=True, to='ContentViewer.collection'),
+            field=models.ManyToManyField(blank=True, to='ContentManager.collection'),
         ),
         migrations.AlterField(
             model_name='content',
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='content',
             name='creators',
-            field=models.ManyToManyField(blank=True, related_name='content_creators', to='ContentViewer.creator'),
+            field=models.ManyToManyField(blank=True, related_name='content_creators', to='ContentManager.creator'),
         ),
         migrations.AlterField(
             model_name='content',
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='content',
             name='related_content',
-            field=models.ManyToManyField(blank=True, to='ContentViewer.content'),
+            field=models.ManyToManyField(blank=True, to='ContentManager.content'),
         ),
         migrations.AlterField(
             model_name='content',
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='content',
             name='tags',
-            field=models.ManyToManyField(blank=True, related_name='content_tags', to='ContentViewer.tag'),
+            field=models.ManyToManyField(blank=True, related_name='content_tags', to='ContentManager.tag'),
         ),
         migrations.AlterField(
             model_name='content',
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='creator',
             name='related_creators',
-            field=models.ManyToManyField(blank=True, to='ContentViewer.creator'),
+            field=models.ManyToManyField(blank=True, to='ContentManager.creator'),
         ),
         migrations.AlterField(
             model_name='creator',

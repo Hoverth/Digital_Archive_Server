@@ -7,7 +7,7 @@ from django.views import generic
 
 
 class ContentListView(generic.ListView):
-    template_name = 'ContentViewer/content-list.html'
+    template_name = 'ContentManager/content-list.html'
     context_object_name = 'content_list'
     paginate_by = 20
 
@@ -22,7 +22,7 @@ def get_filepath(file_dictionary):
 
 class ContentDetailView(generic.DetailView):
     model = Content
-    template_name = 'ContentViewer/content-details.html'
+    template_name = 'ContentManager/content-details.html'
     context_object_name = 'content'
 
     def get_context_data(self, **kwargs):
@@ -37,14 +37,14 @@ class ContentDetailView(generic.DetailView):
         text_types = ['.txt']
 
         files = []
-        if os.path.isdir(os.path.join(STORAGE_DIR, context['object'].files_path)):
-            for file in os.listdir(os.path.join(STORAGE_DIR, context['object'].files_path)):
+        if os.path.isdir(os.path.join(STORAGE_DIR, context['object'].content_path)):
+            for file in os.listdir(os.path.join(STORAGE_DIR, context['object'].content_path)):
                 file_out = {
                     'type': '',
-                    'path': str(context['object'].files_path) + str(file),
+                    'path': str(context['object'].content_path) + str(file),
                     'content': None
                 }
-                file_extension = pathlib.Path(str(file)).suffix
+                file_extension = pathlib.Path(str(file)).suffix.lower()
                 if file_extension in image_types:
                     file_out['type'] = 'image'
 
@@ -55,7 +55,7 @@ class ContentDetailView(generic.DetailView):
                     file_out['type'] = 'text'
                     contents = ''
                     try:
-                        with open(os.path.join(STORAGE_DIR, context['object'].files_path, file), 'r') as infile:
+                        with open(os.path.join(STORAGE_DIR, context['object'].content_path, file), 'r') as infile:
                             contents = infile.read().replace('\n', '<br>')
                     except:
                         contents = 'Error Reading Text File: ' + str(file)
@@ -69,7 +69,7 @@ class ContentDetailView(generic.DetailView):
 
 
 class TagsListView(generic.ListView):
-    template_name = 'ContentViewer/tags.html'
+    template_name = 'ContentManager/tags.html'
     context_object_name = 'tag_list'
     paginate_by = 20
 
@@ -79,7 +79,7 @@ class TagsListView(generic.ListView):
 
 
 class TagDetailsView(generic.ListView):
-    template_name = 'ContentViewer/tag.html'
+    template_name = 'ContentManager/tag.html'
     context_object_name = 'content_list'
     paginate_by = 20
 
@@ -94,7 +94,7 @@ class TagDetailsView(generic.ListView):
 
 
 class NoTagsDetailsView(generic.ListView):
-    template_name = 'ContentViewer/notag.html'
+    template_name = 'ContentManager/notag.html'
     context_object_name = 'content_list'
     paginate_by = 20
 
@@ -104,7 +104,7 @@ class NoTagsDetailsView(generic.ListView):
 
 
 class CreatorsListView(generic.ListView):
-    template_name = 'ContentViewer/creators.html'
+    template_name = 'ContentManager/creators.html'
     context_object_name = 'creator_list'
     paginate_by = 20
 
@@ -114,7 +114,7 @@ class CreatorsListView(generic.ListView):
 
 
 class CreatorDetailsView(generic.ListView):
-    template_name = 'ContentViewer/creator.html'
+    template_name = 'ContentManager/creator.html'
     context_object_name = 'content_list'
     paginate_by = 20
 
@@ -129,7 +129,7 @@ class CreatorDetailsView(generic.ListView):
 
 
 class NoCreatorsDetailsView(generic.ListView):
-    template_name = 'ContentViewer/nocreator.html'
+    template_name = 'ContentManager/nocreator.html'
     context_object_name = 'content_list'
     paginate_by = 20
 

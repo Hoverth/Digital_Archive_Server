@@ -9,9 +9,9 @@
     Content type: {{ content.content_type }} <br/>
     Source URL: {{ content.source_url }} <br/>
     Source ID: {{ content.source_id }} <br/>
-    Creators: {% for creator in content.creators.all %}<a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>,
-    {% empty %}<a href="{% url 'ContentViewer:nocreator' %}">No Creators</a>{% endfor %}<br/>
-    Tags: {% for tag in content.tags.all %}<a href="{% url 'ContentViewer:tag' tag.id %}">{{ tag.name }}</a>, {% empty %}<a href="{% url 'ContentViewer:notag' %}">No Tags</a>{% endfor %} <br/>
+    Creators: {% for creator in content.creators.all %}<a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>,
+    {% empty %}<a href="{% url 'ContentManager:nocreator' %}">No Creators</a>{% endfor %}<br/>
+    Tags: {% for tag in content.tags.all %}<a href="{% url 'ContentManager:tag' tag.id %}">{{ tag.name }}</a>, {% empty %}<a href="{% url 'ContentManager:notag' %}">No Tags</a>{% endfor %} <br/>
     Seen by: {% for user in content.seen_by.all %}{{ user.username }}, {% empty %}None{% endfor %}<br/>
     Liked by: {% for user in content.liked_by.all %}{{ user.username }}, {% empty %}None{% endfor %} <a href="">Favourite</a><br/>
     Content size: {{ content.content_size }} <br/>
@@ -31,12 +31,13 @@
             {% if file.type == "image" %}
                 <img class="file-image" src="{% static file.path %}"/>
             {% elif file.type == "video" %}
-                <video controls="controls" src="{% static file.path %}" type="{{ file.mime }}" playsinline="playsinline"
-                       width="1400">
+                <video controls="controls" src="{% static file.path %}" playsinline="playsinline" width="1400">
                     <p>If you are seeing this, the video did not load!</p>
                 </video>
             {% elif file.contents %}
-                {{ file.contents|safe }}
+                <pre>
+{{ file.contents|safe }}
+                </pre>
             {% else %}
                 {{file.path}} <br/>
             {% endif %}

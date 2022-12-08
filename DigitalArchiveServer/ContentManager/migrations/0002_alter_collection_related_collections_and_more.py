@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ContentViewer', '0001_initial'),
+        ('ContentManager', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='collection',
             name='related_collections',
-            field=models.ManyToManyField(to='ContentViewer.collection'),
+            field=models.ManyToManyField(to='ContentManager.collection'),
         ),
         migrations.AlterField(
             model_name='content',
             name='creators',
-            field=models.ManyToManyField(related_name='content_creators', to='ContentViewer.creator'),
+            field=models.ManyToManyField(related_name='content_creators', to='ContentManager.creator'),
         ),
         migrations.AlterField(
             model_name='content',
             name='related_content',
-            field=models.ManyToManyField(to='ContentViewer.content'),
+            field=models.ManyToManyField(to='ContentManager.content'),
         ),
         migrations.AlterField(
             model_name='content',
             name='tags',
-            field=models.ManyToManyField(related_name='content_tags', to='ContentViewer.tag'),
+            field=models.ManyToManyField(related_name='content_tags', to='ContentManager.tag'),
         ),
         migrations.AlterField(
             model_name='creator',
             name='related_creators',
-            field=models.ManyToManyField(to='ContentViewer.creator'),
+            field=models.ManyToManyField(to='ContentManager.creator'),
         ),
     ]

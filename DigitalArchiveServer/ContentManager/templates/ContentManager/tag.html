@@ -3,26 +3,32 @@
 {% load static %}
 {% load paginator_tags %}
 
-{% block title %}Creators{% endblock %}
+{% block title %}{{ tag.name }}{% endblock %}
 
 {% block content %}
-    <h1>Creators</h1>
+    <h1>{{ tag.name }}</h1>
+    <p>
+        Tag ID: {{ tag.tag_id }} <br>
+        Source URL: {{ tag.source_url}} <br>
+        Source ID: {{ tag.source_id }} <br>
+    </p>
     <div class="item-container">
+        {% for content_item in content_list %}
             <div class="item">
-                <a href="{% url 'ContentViewer:nocreator' %}">
-                    <p class='preview'>No preview</p>
-                    <p class="centered">None</p>
+                <a href="{% url 'ContentManager:content' content_item.id %}">
+                    {{ content_item.preview|safe }}
+                    <p class="centered">{{ content_item.title }}</p>
                 </a>
-            </div>
-        {% for creator in creator_list %}
-            <div class="item">
-                <a href="{% url 'ContentViewer:creator' creator.id %}">
-                    {{ creator.preview|safe }}
-                    <p class="centered">{{ creator.name }}</p>
-                </a>
+                <p class="centered creators">
+                    {% for creator in content_item.creators.all %}
+                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
+                    {% empty %}
+                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
+                    {% endfor %}
+                    </p>
             </div>
         {% empty %}
-            <p>No creators are available.</p>
+            <p>No content is available.</p>
         {% endfor %}
     </div>
 {% block pagination %}

@@ -5,6 +5,10 @@ This is a Django webserver interface designed to serve content archived with met
 
 The Django Project is stored under the `DigitalArchiveServer` directory.
 
+## Running with docker
+`sudo docker-compose up -d --build` to build and start the container
+NOTE: the static directory setup in `docker-compose.yml` (the default is `/srv/digital-archive-server/`) needs to be writable `sudo chmod 777 /srv/digital-archive-server/`
+
 ## Components
 ### Content Viewer
 This Django app holds the interfaces used to serve and sort content to the web. 

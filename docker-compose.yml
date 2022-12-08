@@ -9,7 +9,7 @@ services:
       - web
     volumes:
       - type: bind
-        source: /srv/digital-archive-server/  # example directory
+        source: /home/max/static #/srv/digital-archive-server/  # example directory
         target: /home/digital-archive-server/static
   db:
     image: postgres:13.0-alpine
@@ -25,7 +25,7 @@ services:
       - DATABASE_URL
     volumes:
       - type: bind
-        source: /srv/digital-archive-server/  # example directory
+        source: /home/max/static
         target: /home/digital-archive-server/static
     expose:
       - 8000

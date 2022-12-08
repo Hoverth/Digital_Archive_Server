@@ -3,27 +3,22 @@
 {% load static %}
 {% load paginator_tags %}
 
-{% block title %}{{ tag.name }}{% endblock %}
+{% block title %}No tags{% endblock %}
 
 {% block content %}
-    <h1>{{ tag.name }}</h1>
-    <p>
-        Tag ID: {{ tag.tag_id }} <br>
-        Source URL: {{ tag.source_url}} <br>
-        Source ID: {{ tag.source_id }} <br>
-    </p>
+    <h1>No tags</h1>
     <div class="item-container">
         {% for content_item in content_list %}
             <div class="item">
-                <a href="{% url 'ContentViewer:content' content_item.id %}">
+                <a href="{% url 'ContentManager:content' content_item.id %}">
                     {{ content_item.preview|safe }}
                     <p class="centered">{{ content_item.title }}</p>
                 </a>
                 <p class="centered creators">
                     {% for creator in content_item.creators.all %}
-                        <a href="{% url 'ContentViewer:creator' creator.id %}">{{ creator.name }}</a>
+                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}
-                        <a href="{% url 'ContentViewer:nocreator' %}">No Creators</a>
+                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
                     {% endfor %}
                     </p>
             </div>

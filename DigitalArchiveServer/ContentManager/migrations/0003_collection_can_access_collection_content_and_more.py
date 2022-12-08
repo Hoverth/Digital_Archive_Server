@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('ContentViewer', '0002_alter_collection_related_collections_and_more'),
+        ('ContentManager', '0002_alter_collection_related_collections_and_more'),
     ]
 
     operations = [
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='collection',
             name='content',
-            field=models.ManyToManyField(related_name='collection_content', to='ContentViewer.content'),
+            field=models.ManyToManyField(related_name='collection_content', to='ContentManager.content'),
         ),
         migrations.AddField(
             model_name='collection',
