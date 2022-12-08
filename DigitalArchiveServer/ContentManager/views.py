@@ -136,3 +136,38 @@ class NoCreatorsDetailsView(generic.ListView):
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(creators=None).order_by('-time_retrieved')
         return content_list
+
+
+class CollectionsListView(generic.ListView):
+    template_name = 'ContentManager/collections.html'
+    context_object_name = 'collection_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        collection_list = Collection.objects.order_by('name')
+        return collection_list
+
+
+class CollectionDetailsView(generic.ListView):
+    template_name = 'ContentManager/collection.html'
+    context_object_name = 'content_list'
+    paginate_by = 20
+
+    def get_queryset(self, **kwargs):
+        content_list = Content.objects.filter(tags__id=self.kwargs['pk']).order_by('-time_retrieved')
+        return content_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CollectionDetailsView, self).get_context_data(**kwargs)
+        context['collection'] = Collection.objects.filter(id=self.kwargs['pk']).first()
+        return context
+
+
+class NoCollectionsDetailsView(generic.ListView):
+    template_name = 'ContentManager/nocollection.html'
+    context_object_name = 'content_list'
+    paginate_by = 20
+
+    def get_queryset(self, **kwargs):
+        content_list = Content.objects.filter(collection_content=None).order_by('-time_retrieved')
+        return content_list

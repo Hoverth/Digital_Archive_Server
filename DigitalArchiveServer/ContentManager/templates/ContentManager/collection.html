@@ -3,19 +3,27 @@
 {% load static %}
 {% load paginator_tags %}
 
-{% block title %}No Creator{% endblock %}
+{% block title %}{{ collection.name }}{% endblock %}
 
 {% block content %}
-    <h1>No Creator</h1>
+    <h1>{{ collection.name }}</h1>
+    <p>
+        Owners: {% for owner in collection.owners.all %}<a href="">{{ owner.username }}</a>,
+        {% empty %}No Owners</a>{% endfor %}<br/>
+        {% if collection.restricted_access %} This collection's access is restricted <br>{%endif%}
+        Related Collections: {% for related_collection in collection.related_collections.all %}
+        <a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>,
+        {% empty %}None{% endfor %}
+    </p>
     <div class="item-container">
-        {% for content_item in content_list %}
+        {% for content in collection.content.all %}
             <div class="item">
-                <a href="{% url 'ContentManager:content' content_item.id %}">
-                    {{ content_item.preview|safe }}
-                    <p class="centered">{{ content_item.title }}</p>
+                <a href="{% url 'ContentManager:content' content.id %}">
+                    {{ content.preview|safe }}
+                    <p class="centered">{{ content.title }}</p>
                 </a>
-                <p class="centered creators">
-                    {% for creator in content_item.creators.all %}
+                <p class="centered" class="collections">
+                    {% for collection in content.collections.all %}
                         <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}
                         <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>

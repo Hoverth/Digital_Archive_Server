@@ -3,27 +3,26 @@
 {% load static %}
 {% load paginator_tags %}
 
-{% block title %}No Creator{% endblock %}
+{% block title %}Collections{% endblock %}
 
 {% block content %}
-    <h1>No Creator</h1>
+    <h1>Collections</h1>
     <div class="item-container">
-        {% for content_item in content_list %}
             <div class="item">
-                <a href="{% url 'ContentManager:content' content_item.id %}">
-                    {{ content_item.preview|safe }}
-                    <p class="centered">{{ content_item.title }}</p>
+                <a href="{% url 'ContentManager:nocollection' %}">
+                    <p class='preview'>No preview</p>
+                    <p class="centered">None</p>
                 </a>
-                <p class="centered creators">
-                    {% for creator in content_item.creators.all %}
-                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
-                    {% empty %}
-                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
-                    {% endfor %}
-                    </p>
+            </div>
+        {% for collection in collection_list %}
+            <div class="item">
+                <a href="{% url 'ContentManager:collection' collection.id %}">
+                    {{ collection.preview|safe }}
+                    <p class="centered">{{ collection.name }}</p>
+                </a>
             </div>
         {% empty %}
-            <p>No content is available.</p>
+            <p>No collections are available.</p>
         {% endfor %}
     </div>
 {% block pagination %}

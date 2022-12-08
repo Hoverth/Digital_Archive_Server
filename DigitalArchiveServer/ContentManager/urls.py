@@ -12,4 +12,7 @@ urlpatterns = [
     path('creators', views.CreatorsListView.as_view(), name='creators'),
     path('creator/0', views.NoCreatorsDetailsView.as_view(), name='nocreator'),
     path('creator/<int:pk>', views.CreatorDetailsView.as_view(), name='creator'),
+    path('collections', views.CollectionsListView.as_view(), name='collections'),
+    path('collection/0', views.NoCollectionsDetailsView.as_view(), name='nocollection'),
+    path('collection/<int:pk>', views.CollectionDetailsView.as_view(), name='collection'),
 ]
