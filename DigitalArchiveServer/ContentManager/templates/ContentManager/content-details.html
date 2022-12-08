@@ -23,7 +23,8 @@
     Notes: {{ content.notes }}<br/>
     Content Language: {{ content.language }} <br/>
     Content Copyright: {{ content.copyright }} <br/>
-    Related Content: {% for content in content.related_content.all %}<a href="{% url 'ContentManager:content' content.id %}">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}
+    Related Content: {% for content in content.related_content.all %}<a href="{% url 'ContentManager:content' content.id %}">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}<br>
+    In Collections: {% for collection in content.collection_content.all %}<a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>, {% empty %}None{% endfor %}
 </p>
 <div class="file-container">
     {% for file in files %}
