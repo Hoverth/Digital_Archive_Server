@@ -3,6 +3,23 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
+# Archiver Models
+
+class Archiver(models.Model):
+    # This model will be used later (maybe, probably)
+    name = models.CharField(max_length=255)
+    codename = models.CharField(max_length=16)
+    base_url = models.CharField(max_length=255)
+    about = models.TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # save the archiver, only allowing a single instance for each base_url
+        self.__class__.objects.filter(base_url=self.base_url).delete()
+        super().save(*args, **kwargs)
+
+
+# Content Models
+
 class Tag(models.Model):
     # Standard Fields
     name = models.CharField(max_length=255)

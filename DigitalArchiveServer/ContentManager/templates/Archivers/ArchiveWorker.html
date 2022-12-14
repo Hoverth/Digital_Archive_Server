@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'ContentManager:Archivers:index' %}">&lt;-- Back to Archive Workers</a>
+<h1>{{ name }}</h1>
+<a href="{{ base_url }}">{{ base_url }}</a>
+<p>{{ about }}</p>
+{% if error_message %}
+<p style="color:#F22">{{ error_message }}</p>
+{% endif %}
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+<iframe src="/static/{{ codename }}/log.txt" width="1600" height="500" frameBorder="0"></iframe>
+{% endblock %}

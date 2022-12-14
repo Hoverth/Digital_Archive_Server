@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Archive Workers{% endblock %}
+
+{% block content %}
+<h1>Archive Workers</h1>
+{% for archiver in archivers %}
+    <a href="{% url 'ContentManager:Archivers:archiver' archiver.codename %}">{{ archiver.name }}
+{% endfor %}
+
+{% endblock %}

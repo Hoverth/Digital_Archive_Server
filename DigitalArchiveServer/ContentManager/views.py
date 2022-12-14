@@ -1,8 +1,9 @@
 import os
 import pathlib
-from django.shortcuts import render
+
+import django.contrib.auth.models
 from .models import Creator, Tag, Content, Collection
-from .settings import STORAGE_DIR
+from .settings import STATIC_ROOT
 from django.views import generic
 
 
@@ -29,19 +30,22 @@ class ContentDetailView(generic.DetailView):
         context = super(ContentDetailView, self).get_context_data(**kwargs)
 
         content = context['content']
-        content.seen_by.add(self.request.user)
-        content.save()
+        if self.request.user.is_authenticated:
+            content.seen_by.add(self.request.user)
+            content.save()
 
         image_types = ['.gif', '.jpg', '.png']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']
 
         files = []
-        if os.path.isdir(os.path.join(STORAGE_DIR, context['object'].content_path)):
-            for file in os.listdir(os.path.join(STORAGE_DIR, context['object'].content_path)):
+        if pathlib.Path(STATIC_ROOT, content.content_path).is_dir():
+            for file in pathlib.Path(STATIC_ROOT, content.content_path).glob('*'):
+                if '.meta' in file.name:
+                    continue
                 file_out = {
                     'type': '',
-                    'path': str(context['object'].content_path) + str(file),
+                    'path': str(pathlib.Path(content.content_path, file)).replace(STATIC_ROOT, ''),
                     'content': None
                 }
                 file_extension = pathlib.Path(str(file)).suffix.lower()
@@ -55,7 +59,7 @@ class ContentDetailView(generic.DetailView):
                     file_out['type'] = 'text'
                     contents = ''
                     try:
-                        with open(os.path.join(STORAGE_DIR, context['object'].content_path, file), 'r') as infile:
+                        with open(pathlib.Path(STATIC_ROOT, content.content_path, file), 'r') as infile:
                             contents = infile.read().replace('\n', '<br>')
                     except:
                         contents = 'Error Reading Text File: ' + str(file)

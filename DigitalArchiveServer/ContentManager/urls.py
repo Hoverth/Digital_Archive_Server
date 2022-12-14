@@ -15,4 +15,5 @@ urlpatterns = [
     path('collections', views.CollectionsListView.as_view(), name='collections'),
     path('collection/0', views.NoCollectionsDetailsView.as_view(), name='nocollection'),
     path('collection/<int:pk>', views.CollectionDetailsView.as_view(), name='collection'),
+    path('archivers/', include('ContentManager.Archivers.archiver'))
 ]
