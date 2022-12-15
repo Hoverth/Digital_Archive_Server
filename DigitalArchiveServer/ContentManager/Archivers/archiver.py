@@ -5,14 +5,19 @@ from django.shortcuts import render
 from django.urls import path
 from django.http import HttpResponseNotFound
 
-from . import ArchiveWorker
+from . import ArchiveWorker, ArchiveMHG
 from ..settings import STATIC_ROOT
 from ..models import Content, Tag, Creator
 
-archive_workers = []
+archive_workers = [
+    ArchiveMHG.MhgArchiveWorker
+]
 
 
 def view_archive_tools(request):
+    if request.method == 'POST':
+        if 'scan-library' in request.POST:
+            scan_library_for_existing_content()
     context = {
         'archivers': archive_workers
     }
@@ -28,7 +33,7 @@ def view_archiver(request, codename):
     return response
 
 
-def scan_library_for_existing_content(request):
+def scan_library_for_existing_content():
     content_path = pathlib.Path(STATIC_ROOT)
     lines = []
     for file in content_path.rglob('*'):
@@ -45,8 +50,8 @@ def scan_library_for_existing_content(request):
                     metadata['content-path'] = content_path
 
                 for archive_worker in archive_workers:
-                    if archive_worker().base_url in metadata['source_url']:
-                        archive_worker().get_content(metadata['source_url'])
+                    if archive_worker().base_url in metadata['source-url']:
+                        archive_worker().get_content(metadata['source-url'])
                     else:
                         ArchiveWorker.ArchiveWorker().save_content(metadata)
                 if len(archive_workers) == 0:
@@ -72,12 +77,9 @@ def scan_library_for_existing_content(request):
             creator.preview = '<p class=\'preview\'>This creator has no generated preview</p>'
             creator.save()
 
-    return render(request, 'ContentManager/scan.html', {'lines': lines})
-
 
 app_name = 'Archivers'
 urlpatterns = [
     path('', view_archive_tools, name='index'),
-    path('<str:codename>', view_archiver, name='archiver'),
-    path('scan', scan_library_for_existing_content)
+    path('<str:codename>', view_archiver, name='archiver')
 ]

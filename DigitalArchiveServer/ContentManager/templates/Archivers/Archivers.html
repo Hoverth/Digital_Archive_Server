@@ -5,7 +5,10 @@
 {% block content %}
 <h1>Archive Workers</h1>
 {% for archiver in archivers %}
-    <a href="{% url 'ContentManager:Archivers:archiver' archiver.codename %}">{{ archiver.name }}
+    <a href="{% url 'ContentManager:Archivers:archiver' archiver.codename %}">{{ archiver.name }}</a>
 {% endfor %}
-
+<form action="" method="POST">
+{% csrf_token %}
+<button type="submit" name="scan-library">Scan Library</button>
+</form>
 {% endblock %}
