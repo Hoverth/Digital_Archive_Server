@@ -35,6 +35,8 @@
                 <video controls="controls" src="{% static file.path %}" playsinline="playsinline" width="1400">
                     <p>If you are seeing this, the video did not load!</p>
                 </video>
+            {% elif file.type == "iframe" %}
+                <iframe src="{% static file.path %}" width="1600" height="700"></iframe>
             {% elif file.contents %}
                 <pre>
 {{ file.contents|safe }}

@@ -37,6 +37,7 @@ class ContentDetailView(generic.DetailView):
         image_types = ['.gif', '.jpg', '.png']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']
+        iframe_types = ['.html']
 
         files = []
         if pathlib.Path(STATIC_ROOT, content.content_path).is_dir():
@@ -54,6 +55,9 @@ class ContentDetailView(generic.DetailView):
 
                 if file_extension in video_types:
                     file_out['type'] = 'video'
+
+                if file_extension in iframe_types:
+                    file_out['type'] = 'iframe'
 
                 if file_extension in text_types:
                     file_out['type'] = 'text'
