@@ -8,6 +8,7 @@ The Django Project is stored under the `DigitalArchiveServer` directory.
 ## Running with docker
 `sudo docker-compose up -d --build` to build and start the container
 NOTE: the static directory setup in `docker-compose.yml` (the default is `/srv/digital-archive-server/`) needs to be writable `sudo chmod 777 /srv/digital-archive-server/`
+`sudo docker-compose exec web python DigitalArchiveServer/manage.py createsuperuser` to create a super-user
 
 ## Components
 ### Content Viewer
@@ -27,10 +28,10 @@ It is served under `/`.
  - `/creator/[creator-id]` - A ListView that shows the details of a creator and lists the content created by that creator
 
 ### Archivers
-This django app contains the interfaces used to archive and store new content.
-It is stored under `DigitalArchiveServer/Archivers`
+This directory contains the interfaces used to archive and store new content.
+It is stored under `DigitalArchiveServer/ContentManager/Archivers`
 It is served under `/archivers`
 
 #### Views
  - `/archivers` - A list of all available archivers
- - `/archivers/[archiver-id]` - A DetailView on that archiver
+ - `/archivers/[archiver-codename]` - A DetailView on that archiver, allowing you to see the logs and request archival
