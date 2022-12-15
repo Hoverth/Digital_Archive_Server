@@ -33,7 +33,8 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:1337", "http://localhost:1338"]  # tru
 # Application definition
 
 INSTALLED_APPS = [
-    'ContentManager.apps.ContentviewerConfig',
+    'ContentManager.apps.ContentManagerConfig',
+    'Users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +58,9 @@ ROOT_URLCONF = 'DigitalArchiveServer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            Path(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,3 +133,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = "/home/digital-archive-server/static"
+
+LOGIN_REDIRECT_URL = '/'
