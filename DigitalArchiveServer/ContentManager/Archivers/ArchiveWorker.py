@@ -187,6 +187,9 @@ class ArchiveWorker:
         a.about = self.about
         a.save()
 
+    def get_model(self):
+        return Archiver.objects.filter(base_url=self.base_url)[0]
+
     class ActionForm(forms.Form):
         ENABLED_ACTIONS = [
             ('get_existing_remote_library', 'get_existing_remote_library'),
@@ -249,8 +252,7 @@ class ArchiveWorker:
     def get_content(self, url):
         pass
 
-    @staticmethod
-    def save_content(metadata):
+    def save_content(self, metadata):
         metafile_path = pathlib.Path(STATIC_ROOT, metadata['content-path'], '.meta')
         if not metafile_path.exists():
             metafile_path.touch()
@@ -280,6 +282,8 @@ class ArchiveWorker:
 
         new_content.content_size = pathlib.Path(STATIC_ROOT, metadata['content-path']).stat().st_size
         new_content.preview = ArchiveWorker.make_preview(metadata['content-path'])
+
+        new_content.from_archiver = self.get_model()
 
         new_content.save()
 

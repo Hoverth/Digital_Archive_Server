@@ -24,7 +24,8 @@
     Content Language: {{ content.language }} <br/>
     Content Copyright: {{ content.copyright }} <br/>
     Related Content: {% for content in content.related_content.all %}<a href="{% url 'ContentManager:content' content.id %}">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}<br>
-    In Collections: {% for collection in content.collection_content.all %}<a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>, {% empty %}None{% endfor %}
+    In Collections: {% for collection in content.collection_content.all %}<a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>, {% empty %}None{% endfor %}<br>
+    {% if content.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' content.from_archiver.codename %}">{{ content.from_archiver.name }}</a>{% endif %}
 </p>
 <div class="file-container">
     {% for file in files %}
