@@ -310,6 +310,10 @@ class ArchiveWorker:
                 if 'adult' in creator:
                     new_creator.adult = creator['adult']
                 new_creator.save()
+
+                new_creator.from_archiver = self.get_model()
+                new_creator.save()
+
                 new_content.creators.add(new_creator)
 
         if metadata['tags'] is not None:
@@ -328,6 +332,10 @@ class ArchiveWorker:
                 if 'adult' in tag:
                     new_tag.adult = tag['adult']
                 new_tag.save()
+
+                new_tag.from_archiver = self.get_model()
+                new_tag.save()
+
                 new_content.tags.add(new_tag)
 
         new_content.save()
