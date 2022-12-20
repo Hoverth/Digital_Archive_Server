@@ -17,6 +17,9 @@
         <a href="{% url 'ContentManager:creators' %}">Creators</a>
         <a href="{% url 'ContentManager:collections' %}">Collections</a>
         {% if user.is_authenticated %}
+            {% if perms.ContentManager.can_archive %}
+                <a href="{% url 'ContentManager:Archivers:index' %}">Archivers</a>
+            {% endif %}
             <a href="{# {% url 'ContentManager:user' user.get_username %} #}">{{ user.get_username }}</a>
             <a href="{% url 'logout' %}?next=/">Logout</a>
         {% else %}

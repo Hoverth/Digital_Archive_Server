@@ -11,11 +11,17 @@ class Archiver(models.Model):
     base_url = models.CharField(max_length=255)
     about = models.TextField(null=True, blank=True)
     related_types = models.TextField(default='')
+    adult = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # save the archiver, only allowing a single instance for each source (base_url)
         self.__class__.objects.filter(base_url=self.base_url).delete()
         super().save(*args, **kwargs)
+
+    class Meta:
+        permissions = [
+            ('can_archive', 'Can order archival')
+        ]
 
 
 # Content Models
@@ -26,6 +32,7 @@ class Tag(models.Model):
     tag_id = models.CharField(max_length=255, null=True, blank=True)
     source_url = models.CharField(max_length=255, null=True, blank=True)
     source_id = models.CharField(max_length=255, null=True, blank=True)
+    adult = models.BooleanField(default=False)
 
     # Additional Fields
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This tag has no generated preview</p>')
@@ -42,6 +49,7 @@ class Creator(models.Model):
     about = models.TextField(null=True, blank=True)
     source_url = models.CharField(max_length=255, null=True, blank=True)
     source_id = models.CharField(max_length=255, null=True, blank=True)
+    adult = models.BooleanField(default=False)
 
     # Additional Fields
     related_creators = models.ManyToManyField('self', blank=True)
@@ -75,7 +83,12 @@ class Content(models.Model):
     seen_by = models.ManyToManyField(User, related_name='content_seen_by', blank=True)
     liked_by = models.ManyToManyField(User, related_name='content_liked_by', blank=True)
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This content has no generated preview</p>')
-    from_archiver = models.ForeignKey(Archiver, on_delete=models.CASCADE, null=True)
+    from_archiver = models.ForeignKey(Archiver, on_delete=models.RESTRICT, null=True)
+
+    class Meta:
+        permissions = [
+            ('adult_content', 'Can View 18+ content')
+        ]
 
     def __str__(self):
         return str(self.content_type) + '  //  ' + str(self.title)
@@ -89,6 +102,7 @@ class Collection(models.Model):
     content = models.ManyToManyField(Content, related_name='collection_content')
     related_collections = models.ManyToManyField('self', blank=True)
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This collection has no generated preview</p>')
+    adult = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)

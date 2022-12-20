@@ -6,6 +6,8 @@
 <h1>Archive Workers</h1>
 {% for archiver in archivers %}
     <a href="{% url 'ContentManager:Archivers:archiver' archiver.codename %}">{{ archiver.name }}</a>
+{% empty %}
+    <p>There are no available archive workers!</p>
 {% endfor %}
 <form action="" method="POST">
 {% csrf_token %}

@@ -11,6 +11,7 @@
         Owners: {% for owner in collection.owners.all %}<a href="">{{ owner.username }}</a>,
         {% empty %}No Owners</a>{% endfor %}<br/>
         {% if collection.restricted_access %} This collection's access is restricted <br>{%endif%}
+        {% if collection.adult %}Adult Collection<br>{% endif %}
         Related Collections: {% for related_collection in collection.related_collections.all %}
         <a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>,
         {% empty %}None{% endfor %}

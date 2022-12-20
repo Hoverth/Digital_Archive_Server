@@ -11,6 +11,8 @@ from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import render
 from django import forms
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 from ..settings import STATIC_ROOT, STATIC_URL
 from ..models import Content, Archiver, Tag, Creator
@@ -168,6 +170,7 @@ class ArchiveWorker:
     codename = ''
     base_url = ''
     about = ''
+    adult = False
     enabled_actions = [
         'get_existing_remote_library',
         'get_content_new',
@@ -180,15 +183,17 @@ class ArchiveWorker:
 
     # registers the ArchiveWorker with the website, allowing it to be referred to
     def register(self):
-        a = Archiver()
-        a.name = self.name
-        a.codename = self.codename
-        a.base_url = self.base_url
-        a.about = self.about
-        a.save()
+        if not Archiver.objects.filter(codename=self.codename).exists():
+            a = Archiver()
+            a.name = self.name
+            a.codename = self.codename
+            a.base_url = self.base_url
+            a.adult = self.adult
+            a.about = self.about
+            a.save()
 
     def get_model(self):
-        return Archiver.objects.filter(base_url=self.base_url)[0]
+        return Archiver.objects.get(codename=self.codename)
 
     class ActionForm(forms.Form):
         ENABLED_ACTIONS = [
@@ -302,6 +307,8 @@ class ArchiveWorker:
                     new_creator.source_url = creator['creator-source-url']
                 if 'creator-source-id' in creator:
                     new_creator.source_id = creator['creator-source-id']
+                if 'adult' in creator:
+                    new_creator.adult = creator['adult']
                 new_creator.save()
                 new_content.creators.add(new_creator)
 
@@ -318,8 +325,12 @@ class ArchiveWorker:
                     new_tag.source_url = tag['tag-source-url']
                 if 'tag-source-id' in tag:
                     new_tag.source_id = tag['tag-source-id']
+                if 'adult' in tag:
+                    new_tag.adult = tag['adult']
                 new_tag.save()
                 new_content.tags.add(new_tag)
+
+        new_content.save()
 
     # returns a preview html string for the content
     @staticmethod
@@ -387,6 +398,15 @@ class ArchiveWorker:
                     return 1
 
         return 0
+
+    @staticmethod
+    def validate_url(url):
+        validator = URLValidator()
+        try:
+            validator(url)
+        except ValidationError:
+            return False
+        return True
 
     def log_print(self, message):
         log_path = pathlib.Path(STATIC_ROOT, self.codename, 'log.txt')

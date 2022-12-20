@@ -1,4 +1,3 @@
-import os
 import pathlib
 
 import django.contrib.auth.models
@@ -14,6 +13,8 @@ class ContentListView(generic.ListView):
 
     def get_queryset(self):
         content_list = Content.objects.order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
         return content_list
 
 
@@ -30,11 +31,23 @@ class ContentDetailView(generic.DetailView):
         context = super(ContentDetailView, self).get_context_data(**kwargs)
 
         content = context['content']
+
+        if Tag.objects.filter(tag_id='adult-content').exists():
+            adult_content_tag = Tag.objects.get(tag_id='adult-content')
+        else:
+            context['content'] = None
+            return context
+
+        if (not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content')) \
+                and adult_content_tag not in content.tags:
+            context['content'] = None
+            return context
+
+        image_types = ['.gif', '.jpg', '.png']
         if self.request.user.is_authenticated:
             content.seen_by.add(self.request.user)
             content.save()
 
-        image_types = ['.gif', '.jpg', '.png']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']
         iframe_types = ['.html']
@@ -83,6 +96,9 @@ class TagsListView(generic.ListView):
 
     def get_queryset(self):
         tag_list = Tag.objects.order_by('name')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            tag_list = tag_list.exclude(adult=True)
+
         return tag_list
 
 
@@ -93,6 +109,9 @@ class TagDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(tags__id=self.kwargs['pk']).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+
         return content_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -108,6 +127,9 @@ class NoTagsDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(tags=None).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+
         return content_list
 
 
@@ -118,6 +140,8 @@ class CreatorsListView(generic.ListView):
 
     def get_queryset(self):
         creator_list = Creator.objects.order_by('name')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            creator_list = creator_list.exclude(adult=True)
         return creator_list
 
 
@@ -128,6 +152,9 @@ class CreatorDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(creators__id=self.kwargs['pk']).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+
         return content_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -143,6 +170,9 @@ class NoCreatorsDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(creators=None).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+
         return content_list
 
 
@@ -153,6 +183,8 @@ class CollectionsListView(generic.ListView):
 
     def get_queryset(self):
         collection_list = Collection.objects.order_by('name')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            collection_list = collection_list.exclude(adult=True)
         return collection_list
 
 
@@ -163,6 +195,9 @@ class CollectionDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(tags__id=self.kwargs['pk']).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+
         return content_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -178,4 +213,7 @@ class NoCollectionsDetailsView(generic.ListView):
 
     def get_queryset(self, **kwargs):
         content_list = Content.objects.filter(collection_content=None).order_by('-time_retrieved')
+        if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
+            content_list = content_list.exclude(tags__tag_id='adult-content')
+        
         return content_list

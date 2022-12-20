@@ -11,7 +11,8 @@
         Tag ID: {{ tag.tag_id }} <br>
         Source URL: {{ tag.source_url}} <br>
         Source ID: {{ tag.source_id }} <br>
-        {% if tag.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' tag.from_archiver.codename %}">{{ tag.from_archiver.name }}</a>{% endif %}
+        {% if tag.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' tag.from_archiver.codename %}">{{ tag.from_archiver.name }}</a><br>{% endif %}
+        {% if tag.adult %}Adult Tag{% endif %}
     </p>
     <div class="item-container">
         {% for content_item in content_list %}
