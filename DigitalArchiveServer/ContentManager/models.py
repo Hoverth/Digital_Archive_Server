@@ -29,9 +29,9 @@ class Archiver(models.Model):
 class Tag(models.Model):
     # Standard Fields
     name = models.CharField(max_length=255)
-    tag_id = models.CharField(max_length=255, null=True, blank=True)
-    source_url = models.CharField(max_length=255, null=True, blank=True)
-    source_id = models.CharField(max_length=255, null=True, blank=True)
+    tag_id = models.CharField(max_length=255, default='')
+    source_url = models.CharField(max_length=255, default='')
+    source_id = models.CharField(max_length=255, default='')
     adult = models.BooleanField(default=False)
 
     # Additional Fields
@@ -45,10 +45,10 @@ class Tag(models.Model):
 class Creator(models.Model):
     # Standard Fields
     name = models.CharField(max_length=255)
-    creator_id = models.CharField(max_length=255, null=True, blank=True)
-    about = models.TextField(null=True, blank=True)
-    source_url = models.CharField(max_length=255, null=True, blank=True)
-    source_id = models.CharField(max_length=255, null=True, blank=True)
+    creator_id = models.CharField(max_length=255, default='')
+    about = models.TextField(default='')
+    source_url = models.CharField(max_length=255, default='')
+    source_id = models.CharField(max_length=255, default='')
     adult = models.BooleanField(default=False)
 
     # Additional Fields
@@ -70,10 +70,10 @@ class Content(models.Model):
     time_retrieved = models.DateTimeField(default=timezone.now)
     creators = models.ManyToManyField('Creator', related_name='content_creators', blank=True)
     tags = models.ManyToManyField('Tag', related_name='content_tags', blank=True)
-    notes = models.TextField(null=True, blank=True)
+    notes = models.TextField(default='', blank=True)
     time_created = models.DateTimeField(null=True, blank=True)
-    language = models.CharField(max_length=255, null=True, blank=True)
-    copyright = models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=255, default='', blank=True)
+    copyright = models.CharField(max_length=255, default='', blank=True)
     related_content = models.ManyToManyField('self', blank=True)
 
     # Additional Fields

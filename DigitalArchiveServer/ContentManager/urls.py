@@ -1,8 +1,9 @@
 from django.urls import path, include
 from . import views
+from .search import SearchView
 
 
-app_name = "ContentManager"  # {{ url }} needs to have "main:" before the urls name
+app_name = "ContentManager"  # {{ url }} needs to have "ContentManager:" before the urls name
 urlpatterns = [
     path('', views.ContentListView.as_view(), name='index'),
     path('content/<int:pk>', views.ContentDetailView.as_view(), name='content'),
@@ -15,5 +16,6 @@ urlpatterns = [
     path('collections', views.CollectionsListView.as_view(), name='collections'),
     path('collection/0', views.NoCollectionsDetailsView.as_view(), name='nocollection'),
     path('collection/<int:pk>', views.CollectionDetailsView.as_view(), name='collection'),
+    path('search', SearchView.as_view(), name='search'),
     path('archivers/', include('ContentManager.Archivers.archiver'))
 ]
