@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load paginator_tags %}
+
+{% block title %}Liked Content - {{ target_user.username }}{% endblock %}
+
+{% block content %}
+    <h1><a href="{% url 'ContentManager:user' user.username %}">{{ user.username }}</a></h1>
+    <h2>Liked Content</h2>
+    <div class="item-container">
+        {% for content_item in liked_content %}
+            <div class="item">
+                <a href="{% url 'ContentManager:content' content_item.id %}">
+                    {{content_item.preview|safe}}
+                    <p class="centered">{{ content_item.title }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for creator in content_item.creators.all %}
+                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
+                    {% empty %}
+                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No content is available.</p>
+        {% endfor %}
+    </div>
+{% block pagination %}
+{% if is_paginated %}
+    <div class="centred">
+        <p>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</p>
+        <div class="pagination">
+            <span class="page-links">
+                {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                {% for page_number in page_range %}
+                    {% if page_number == page_obj.paginator.ELLIPSIS %}
+                        {{page_number}}
+                    {% else %}
+                        {% if '?' in request.path %}
+                            <a href="{{request.path}}&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% else %}
+                            <a href="{{request.path}}?page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+{% endblock %}

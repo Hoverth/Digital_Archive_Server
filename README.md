@@ -35,3 +35,12 @@ It is served under `/archivers`
 #### Views
  - `/archivers` - A list of all available archivers
  - `/archivers/[archiver-codename]` - A DetailView on that archiver, allowing you to see the logs and request archival
+
+### Users
+There are two groups you can assign to users, Adult and Archivers.
+
+#### Adult
+Assigning a user to this group means that they can access anything marked as adult content
+
+#### Archivers
+Archivers can access the archivers page and can start archive workers archiving things

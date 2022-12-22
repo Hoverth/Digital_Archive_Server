@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load paginator_tags %}
+
+{% block title %}{{ target_user.username }} - User{% endblock %}
+
+{% block content %}
+    <h1>{{ target_user.username }}</h1>
+
+    <h2>Seen Content</h2>
+    <a href="{% url 'ContentManager:user_seen' target_user.username %}">See more</a>
+    <div class="item-container">
+        {% for content_item in seen_content %}
+            <div class="item">
+                <a href="{% url 'ContentManager:content' content_item.id %}">
+                    {{content_item.preview|safe}}
+                    <p class="centered">{{ content_item.title }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for creator in content_item.creators.all %}
+                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
+                    {% empty %}
+                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No content is available.</p>
+        {% endfor %}
+    </div>
+
+    <h2>Liked Content</h2>
+    <a href="{% url 'ContentManager:user_liked' target_user.username %}">See more</a>
+    <div class="item-container">
+        {% for content_item in liked_content %}
+            <div class="item">
+                <a href="{% url 'ContentManager:content' content_item.id %}">
+                    {{content_item.preview|safe}}
+                    <p class="centered">{{ content_item.title }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for creator in content_item.creators.all %}
+                        <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
+                    {% empty %}
+                        <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No content is available.</p>
+        {% endfor %}
+    </div>
+
+    <h2>Collections</h2>
+    <a href="{% url 'ContentManager:user_collections' target_user.username %}">See more</a>
+    <div class="item-container">
+        {% for collection in collections %}
+            <div class="item">
+                <a href="{% url 'ContentManager:collection' collection.id %}">
+                    {{collection.preview|safe}}
+                    <p class="centered">{{ collection.name }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for owner in collection.owners.all %}
+                        <a href="{% url 'ContentManager:user' owner.username %}">{{ owner.username }}</a>
+                    {% empty %}
+                        No owners
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No collections are available.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

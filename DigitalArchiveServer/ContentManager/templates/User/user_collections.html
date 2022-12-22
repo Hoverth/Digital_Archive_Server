@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load paginator_tags %}
+
+{% block title %}Collections - {{ target_user.username }}{% endblock %}
+
+{% block content %}
+    <h1><a href="{% url 'ContentManager:user' user.username %}">{{ user.username }}</a></h1>
+    <h2>Collections</h2>
+    <div class="item-container">
+        {% for collection in collections %}
+            <div class="item">
+                <a href="{% url 'ContentManager:collection' collection.id %}">
+                    {{collection.preview|safe}}
+                    <p class="centered">{{ collection.name }}</p>
+                </a>
+                <p class="centered" class="creators">
+                    {% for owner in collection.owners.all %}
+                        <a href="{% url 'ContentManager:user' owner.username %}">{{ owner.username }}</a>
+                    {% empty %}
+                        No owners
+                    {% endfor %}
+                    </p>
+            </div>
+        {% empty %}
+            <p>No collections are available.</p>
+        {% endfor %}
+    </div>
+{% block pagination %}
+{% if is_paginated %}
+    <div class="centred">
+        <p>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</p>
+        <div class="pagination">
+            <span class="page-links">
+                {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+                {% for page_number in page_range %}
+                    {% if page_number == page_obj.paginator.ELLIPSIS %}
+                        {{page_number}}
+                    {% else %}
+                        {% if '?' in request.path %}
+                            <a href="{{request.path}}&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% else %}
+                            <a href="{{request.path}}?page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+{% endblock %}

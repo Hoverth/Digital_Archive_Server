@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import views
+from . import views, user_views
 from .search import SearchView
 
 
@@ -17,5 +17,11 @@ urlpatterns = [
     path('collection/0', views.NoCollectionsDetailsView.as_view(), name='nocollection'),
     path('collection/<int:pk>', views.CollectionDetailsView.as_view(), name='collection'),
     path('search', SearchView.as_view(), name='search'),
-    path('archivers/', include('ContentManager.Archivers.archiver'))
+
+    path('archivers/', include('ContentManager.Archivers.archiver')),
+
+    path('user/<str:username>', user_views.user_view, name='user'),
+    path('user/<str:username>/seen', user_views.user_seen_view, name='user_seen'),
+    path('user/<str:username>/liked', user_views.user_liked_view, name='user_liked'),
+    path('user/<str:username>/collections', user_views.user_collections_view, name='user_collections')
 ]
