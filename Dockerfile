@@ -40,7 +40,7 @@ RUN mkdir $HOME/static
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apk update && apk add libpq libxml2-dev libxslt-dev g++ libc-dev
+RUN apk update && apk add libpq libxml2-dev libxslt-dev g++ libc-dev ffmpeg
 COPY --from=builder /digital-archive-server/wheels /wheels
 COPY --from=builder /digital-archive-server/requirements.txt .
 RUN pip install --no-cache /wheels/*
