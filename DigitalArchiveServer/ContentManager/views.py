@@ -43,36 +43,40 @@ class ContentDetailView(generic.DetailView):
             context['content'] = None
             return context
 
-        image_types = ['.gif', '.jpg', '.png']
         if self.request.user.is_authenticated:
             content.seen_by.add(self.request.user)
             content.save()
 
+        image_types = ['.gif', '.jpg', '.png']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']
-        iframe_types = ['.html']
+        iframe_types = ['.html', '.pdf']
+        ignore_types = ['.vtt']
 
         files = []
+        other_files = []
         if pathlib.Path(STATIC_ROOT, content.content_path).is_dir():
             for file in pathlib.Path(STATIC_ROOT, content.content_path).glob('*'):
-                if '.meta' in file.name:
+                if '.meta' in file.name or '.thumbnail-' in file.name:
                     continue
+
                 file_out = {
                     'type': '',
-                    'path': str(pathlib.Path(content.content_path, file)).replace(STATIC_ROOT, ''),
+                    'path': str(pathlib.Path(content.content_path, file)).replace(STATIC_ROOT, '').strip('/'),
                     'content': None
                 }
                 file_extension = pathlib.Path(str(file)).suffix.lower()
+
+                if file_extension in ignore_types:
+                    continue
+
                 if file_extension in image_types:
                     file_out['type'] = 'image'
-
-                if file_extension in video_types:
+                elif file_extension in video_types:
                     file_out['type'] = 'video'
-
-                if file_extension in iframe_types:
+                elif file_extension in iframe_types:
                     file_out['type'] = 'iframe'
-
-                if file_extension in text_types:
+                elif file_extension in text_types:
                     file_out['type'] = 'text'
                     contents = ''
                     try:
@@ -81,9 +85,14 @@ class ContentDetailView(generic.DetailView):
                     except:
                         contents = 'Error Reading Text File: ' + str(file)
                     file_out['contents'] = str(contents)
-
+                else:
+                    other_files.append(file_out)
+                    continue
                 files.append(file_out)
         files.sort(key=get_filepath)
+        if other_files is not None:
+            other_files.sort(key=get_filepath)
+            files += other_files
         context['files'] = files
 
         return context
