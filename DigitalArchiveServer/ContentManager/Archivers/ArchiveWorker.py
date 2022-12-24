@@ -163,6 +163,13 @@ image_types = ['.gif', '.jpg', '.png']
 video_types = ['.mp4', '.mkv']
 text_types = ['.txt']
 
+enabled_actions = [
+    'get_existing_remote_library',
+    'get_content_new',
+    'get_content_number',
+    'get_content'
+]
+
 
 # this is the class that actually scrapes and builds the archive
 class ArchiveWorker:
@@ -222,24 +229,22 @@ class ArchiveWorker:
             if form.is_valid():
                 context['form'] = form
                 action = form.cleaned_data['action_to_do']
-                if action == 'get_existing_remote_library':
-                    self.get_existing_remote_library()
-                if action == 'get_content_new':
-                    self.get_content_new()
-                if action == 'get_content_number':
-                    if 'number_of_content_to_get' in form.cleaned_data:
-                        self.get_content_number(form.cleaned_data['number_of_content_to_get'])
-                    else:
-                        context['error_message'] = 'A number needs to be inputted for this operation!'
-                if action == 'get_content':
-                    if 'url' in form.cleaned_data:
-                        self.get_content(form.cleaned_data['url'])
-                    else:
-                        context['error_message'] = 'A url needs to be inputted for this operation!'
+
+                handled = self.handle_actions(action, form.cleaned_data)
+
+                if handled:
+                    output, message = handled
+
+                    if output:
+                        context['error_message'] = message
         else:
             form = self.ActionForm()
             context['form'] = form
         return render(request, 'Archivers/ArchiveWorker.html', context=context)
+
+    # this function handles all the actions requested from the view
+    def handle_actions(self, action, data) -> (bool, str):
+        pass
 
     def get_existing_remote_library(self):
         pass
@@ -260,6 +265,7 @@ class ArchiveWorker:
     def save_content(self, metadata):
         metafile_path = pathlib.Path(STATIC_ROOT, metadata['content-path'], '.meta')
         if not metafile_path.exists():
+            metafile_path.parent.mkdir(parents=True, exist_ok=True)
             metafile_path.touch()
         with metafile_path.open(mode='w') as metafile:
             metafile.write(json.dumps(metadata))
@@ -353,7 +359,8 @@ class ArchiveWorker:
                     continue
 
                 if file.suffix in image_types:
-                    return '<img class=\'preview\' src=\'/' + str(file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
+                    return '<img class=\'preview\' src=\'/' + \
+                        str(file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
 
                 if file.suffix in text_types:
                     with open(file, 'r') as in_file:
