@@ -42,10 +42,46 @@
                     {% if page_number == page_obj.paginator.ELLIPSIS %}
                         {{page_number}}
                     {% else %}
-                        {% if '?' in request.path %}
-                            <a href="{{request.path}}&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                        {% if request.GET %}
+                            <a href="{{ request.path }}?title={{ request.GET.title }}
+&content_type={{ request.GET.content_type }}
+&source_url={{ request.GET.source_url }}
+&source_id={{ request.GET.source_id }}
+&content_path={{ request.GET.content_path }}
+&notes={{ request.GET.notes }}
+&language={{ request.GET.language }}
+&copyright={{ request.GET.copyright }}
+&time_created_start={{ request.GET.time_created_start }}
+&time_created_end={{ request.GET.time_created_end }}
+&time_retrieved_start={{ request.GET.time_retrieved_start }}
+&time_retrieved_end={{ request.GET.time_retrieved_end }}
+&published_date_start={{ request.GET.published_date_start }}
+&published_date_end={{ request.GET.published_date_end }}
+&content_size={{ request.GET.content_size }}
+&from_archiver={{ request.GET.from_archiver }}
+&creator_names={{ request.GET.creator_names }}
+&tag_names={{ request.GET.tag_names }}
+&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
                         {% else %}
-                            <a href="{{request.path}}?page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
+                            <a href="{{ request.path }}?title={{ request.GET.title }}
+&content_type={{ request.GET.content_type }}
+&source_url={{ request.GET.source_url }}
+&source_id={{ request.GET.source_id }}
+&content_path={{ request.GET.content_path }}
+&notes={{ request.GET.notes }}
+&language={{ request.GET.language }}
+&copyright={{ request.GET.copyright }}
+&time_created_start={{ request.GET.time_created_start }}
+&time_created_end={{ request.GET.time_created_end }}
+&time_retrieved_start={{ request.GET.time_retrieved_start }}
+&time_retrieved_end={{ request.GET.time_retrieved_end }}
+&published_date_start={{ request.GET.published_date_start }}
+&published_date_end={{ request.GET.published_date_end }}
+&content_size={{ request.GET.content_size }}
+&from_archiver={{ request.GET.from_archiver }}
+&creator_names={{ request.GET.creator_names }}
+&tag_names={{ request.GET.tag_names }}
+&page={{ page_number }}" class="{% if page_number == page_obj.number %}page-current{% endif %}">{{page_number}}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
