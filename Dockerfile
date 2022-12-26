@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install dependencies
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev libxml2-dev libxslt-dev g++ libc-dev make
+    && apk add postgresql-dev gcc python3-dev musl-dev libxml2-dev libxslt-dev g++ libc-dev make zlib-dev jpeg-dev
 
 RUN pip install --upgrade pip
 
