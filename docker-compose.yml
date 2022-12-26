@@ -18,6 +18,25 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
+  rabbitmq:
+    image: rabbitmq:3.11-alpine
+    container_name: rabbitmq
+    env_file:
+      - ./.env
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+  celery:
+    build: .
+    command: celery -A ContentManager worker -l info
+    volumes:
+      - type: bind
+        source: /srv/digital-archive-server/
+        target: /home/digital-archive-server/static
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
   web:
     build: .
     command: gunicorn DigitalArchiveServer.wsgi:application --bind 0.0.0.0:8000
@@ -32,8 +51,11 @@ services:
       - 8000
     depends_on:
       - db
+      - rabbitmq
+      - celery
     env_file:
       - ./.env
+
 
 volumes:
   postgres_data:

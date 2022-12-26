@@ -7,6 +7,8 @@ import jsonschema
 import lxml
 from bs4 import BeautifulSoup
 
+from celery import shared_task
+
 from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import render
@@ -230,36 +232,15 @@ class ArchiveWorker:
                 context['form'] = form
                 action = form.cleaned_data['action_to_do']
 
-                handled = self.handle_actions(action, form.cleaned_data)
+                self.handle_actions(action, form.cleaned_data)
 
-                if handled:
-                    output, message = handled
-
-                    if output:
-                        context['error_message'] = message
         else:
             form = self.ActionForm()
             context['form'] = form
         return render(request, 'Archivers/ArchiveWorker.html', context=context)
 
     # this function handles all the actions requested from the view
-    def handle_actions(self, action, data) -> (bool, str):
-        pass
-
-    def get_existing_remote_library(self):
-        pass
-
-    # this function should scrape for new (if applicable) content off of a site, and pass them to get_objects
-    # or get_object (if a number or an array of urls)
-    def get_content_new(self):
-        pass
-
-    # this function should scrape for a number of content off the site, then pass them to get_object()
-    def get_content_number(self, number):
-        pass
-
-    # this function should scrape content (a single one)
-    def get_content(self, url):
+    def handle_actions(self, action, data):
         pass
 
     def save_content(self, metadata):

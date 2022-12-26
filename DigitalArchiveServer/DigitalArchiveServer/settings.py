@@ -135,3 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = "/home/digital-archive-server/static"
 
 LOGIN_REDIRECT_URL = '/'
+
+CELERY_BROKER_URL = 'amqp://archiver:archiver@rabbitmq:5672/'
+
+CELERY_TASK_SERIALIZER = 'json'

@@ -21,7 +21,6 @@ RUN pip install --upgrade pip
 COPY . .
 
 # install dependencies
-COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /digital-archive-server/wheels -r requirements.txt
 
 #########
