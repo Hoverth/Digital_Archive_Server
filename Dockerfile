@@ -43,7 +43,6 @@ RUN apk update && apk add libpq libxml2-dev libxslt-dev g++ libc-dev ffmpeg
 COPY --from=builder /digital-archive-server/wheels /wheels
 COPY --from=builder /digital-archive-server/requirements.txt .
 RUN pip install --no-cache /wheels/*
-RUN pip install lxml==4.8.0
 
 COPY ./entrypoint.sh .
 RUN sed -i 's/\r$//g'  $HOME/entrypoint.sh
