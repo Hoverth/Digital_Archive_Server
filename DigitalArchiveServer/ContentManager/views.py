@@ -47,6 +47,11 @@ class ContentDetailView(generic.DetailView):
             content.seen_by.add(self.request.user)
             content.save()
 
+            if self.request.GET:
+                if 'like' in self.request.GET:
+                    content.liked_by.add(self.request.user)
+                    content.save()
+
         image_types = ['.gif', '.jpg', '.png']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']

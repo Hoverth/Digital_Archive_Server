@@ -13,7 +13,7 @@
     {% empty %}<a href="{% url 'ContentManager:nocreator' %}">No Creators</a>{% endfor %}<br/>
     Tags: {% for tag in content.tags.all %}<a href="{% url 'ContentManager:tag' tag.id %}">{{ tag.name }}</a>, {% empty %}<a href="{% url 'ContentManager:notag' %}">No Tags</a>{% endfor %} <br/>
     Seen by: {% for user in content.seen_by.all %}{{ user.username }}, {% empty %}None{% endfor %}<br/>
-    Liked by: {% for user in content.liked_by.all %}{{ user.username }}, {% empty %}None{% endfor %} <a href="">Favourite</a><br/>
+    Liked by: {% for user in content.liked_by.all %}{{ user.username }}, {% empty %}None{% endfor %} <a href="{{request.path}}?like">Like</a><br/>
     Content size: {{ content.content_size }} <br/>
     Content path: {{ content.content_path }} <br/>
     Time Created: {{ content.time_created }} <br/>
