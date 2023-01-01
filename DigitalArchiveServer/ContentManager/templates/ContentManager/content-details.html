@@ -27,6 +27,11 @@
     In Collections: {% for collection in content.collection_content.all %}<a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>, {% empty %}None{% endfor %}<br>
     {% if content.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' content.from_archiver.codename %}">{{ content.from_archiver.name }}</a>{% endif %}
 </p>
+{% for file in files %}
+        {% if file.type == "iframe" %}
+            <iframe src="{% static file.path %}" width="1600" height="700"></iframe>
+        {% endif %}
+{% endfor %}
 <div class="file-container">
     {% for file in files %}
         <div class="file">
@@ -36,8 +41,6 @@
                 <video controls="controls" src="{% static file.path %}" playsinline="playsinline" width="1400">
                     <p>If you are seeing this, the video did not load!</p>
                 </video>
-            {% elif file.type == "iframe" %}
-                <iframe src="{% static file.path %}" width="1600" height="700"></iframe>
             {% elif file.contents %}
                 <pre>
 {{ file.contents|safe }}
