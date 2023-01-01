@@ -34,14 +34,10 @@ class ContentDetailView(generic.DetailView):
 
         if Tag.objects.filter(tag_id='adult-content').exists():
             adult_content_tag = Tag.objects.get(tag_id='adult-content')
-        else:
-            context['content'] = None
-            return context
-
-        if (not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content')) \
-                and adult_content_tag not in content.tags:
-            context['content'] = None
-            return context
+            if (not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content')) \
+                    and adult_content_tag not in content.tags:
+                context['content'] = None
+                return context
 
         if self.request.user.is_authenticated:
             content.seen_by.add(self.request.user)
