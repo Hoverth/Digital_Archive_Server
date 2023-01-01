@@ -1,8 +1,15 @@
 from django.contrib.auth.models import User, Group, Permission, ContentType
-from .models import Archiver, Content
+from .models import Archiver, Content, Tag
 
 
 def populate_models(sender, **kwargs):
+    if not Tag.objects.filter(tag_id='adult-content').exists():
+        adult_content_tag = Tag()
+        adult_content_tag.name = "Adult Content"
+        adult_content_tag.tag_id = "adult-content"
+        adult_content_tag.adult = True
+        adult_content_tag.save()
+
     if not Group.objects.filter(name='Adults'):
         if not Permission.objects.filter(codename='adult_content').exists():
             adult_content_permission = Permission()
