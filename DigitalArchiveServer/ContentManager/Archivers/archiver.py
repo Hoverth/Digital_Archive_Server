@@ -5,12 +5,12 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.http import HttpResponseNotFound
 
-from . import ArchiveWorker
+from . import ArchiveWorker, GenericArchiveWorker
 from ..settings import STATIC_ROOT
 from ..models import Content, Tag, Creator
 
 archive_workers = [
-
+    GenericArchiveWorker.GenericArchiveWorker
 ]
 
 

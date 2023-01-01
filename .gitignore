@@ -5,3 +5,5 @@ DigitalArchiveServer/ContentManager/Archivers
 !DigitalArchiveServer/ContentManager/Archivers/__init__.py
 !DigitalArchiveServer/ContentManager/Archivers/archiver.py
 !DigitalArchiveServer/ContentManager/Archivers/ArchiveWorker.py
+!DigitalArchiveServer/ContentManager/Archivers/GenericArchiveWorker.py
+!DigitalArchiveServer/ContentManager/Archivers/archiver-requirements.txt

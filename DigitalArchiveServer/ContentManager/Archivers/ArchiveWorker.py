@@ -405,7 +405,13 @@ class ArchiveWorker:
         return True
 
     def log_print(self, message):
-        log_path = pathlib.Path(STATIC_ROOT, self.codename, 'log.txt')
+        log_path = pathlib.Path(STATIC_ROOT, self.codename)
+
+        log_path.mkdir(parents=True, exist_ok=True)
+        for parent_directory in reversed(pathlib.Path(log_path).parents):
+            parent_directory.mkdir(exist_ok=True, mode=0o777)
+
+        log_path = log_path / 'log.txt'
 
         if not log_path.exists():
             log_path.touch()
