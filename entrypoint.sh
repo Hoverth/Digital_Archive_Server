@@ -13,11 +13,8 @@ fi
 
 cd DigitalArchiveServer || exit
 
-if [ ! -f "$SETUP_FILE" ]; then
-  python manage.py migrate --noinput
-  python manage.py collectstatic --noinput
-else
-  touch "$SETUP_FILE"
-fi
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+
 
 exec "$@"
