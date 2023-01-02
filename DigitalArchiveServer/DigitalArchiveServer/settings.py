@@ -136,6 +136,6 @@ STATIC_ROOT = "/home/digital-archive-server/static"
 
 LOGIN_REDIRECT_URL = '/'
 
-CELERY_BROKER_URL = 'amqp://archiver:archiver@rabbitmq:5672/'
+CELERY_BROKER_URL = 'amqp://' + os.environ.get('RABBITMQ_DEFAULT_USER') + ':' + os.environ.get('RABBITMQ_DEFAULT_PASS') + '@rabbitmq:5672/'
 
 CELERY_TASK_SERIALIZER = 'json'
