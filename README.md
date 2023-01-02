@@ -73,8 +73,9 @@ There are two groups you can assign to users, Adult and Archivers.
  - `/user/[username]/liked` - A ListView showing the content liked by a user
  - `/user/[username]/collections` - A ListView showing the collections owned by a user
 
-#### Adult
+#### Groups
+##### Adult
 Assigning a user to this group means that they can access anything marked as adult content
 
-#### Archivers
+##### Archivers
 Archivers can access the archivers page and can execute orders to ArchiveWorkers to start archiving things
