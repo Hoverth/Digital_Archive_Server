@@ -26,7 +26,7 @@ def populate_models(sender, **kwargs):
         adult_content_group.permissions.add(adult_content_permission)
         adult_content_group.save()
 
-    if not Group.objects.filter(name='Archivers'):
+    if not Group.objects.filter(name='Archivists'):
         if not Permission.objects.filter(codename='can_archive').exists():
             archiver_permission = Permission()
             archiver_permission.name = 'Can order archival'
@@ -37,7 +37,7 @@ def populate_models(sender, **kwargs):
             archiver_permission = Permission.objects.get(codename='can_archive')
 
         archiver_group = Group()
-        archiver_group.name = "Archivers"
+        archiver_group.name = "Archivists"
         archiver_group.save()
         archiver_group.permissions.add(archiver_permission)
         archiver_group.save()
