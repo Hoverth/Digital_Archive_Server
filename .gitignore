@@ -1,5 +1,6 @@
 venv
 .idea
+__pycache__
 DigitalArchiveServer/db.sqlite3
 DigitalArchiveServer/ContentManager/Archivers
 !DigitalArchiveServer/ContentManager/Archivers/__init__.py
