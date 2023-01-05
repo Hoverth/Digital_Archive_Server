@@ -1,12 +1,14 @@
 # Digital Archive Server
 ### !! STILL UNDER ACTIVE DEVELOPMENT; STABILITY IS NOT ASSURED !!
+##### Backing up archived data to a directory unavailable to the Digital Archive Server is recommended to avoid corruption or accidental deletion
 
-This is a webserver designed to serve archived internet-based content (such as websites, webpages, or file collections) with metadata.
+This is a webserver designed to serve and maintain archived internet-based content (such as websites, webpages, or file collections) with metadata, 
+in a format that is easily searchable and user-friendly.
 
 This project makes use of Django, PostgreSQL, RabbitMQ, Celery and nginx inside Docker containers.
 
 Presently, this project consists only of a Django backend, with a basic HTML frontend. 
-This may change to include a backend API and a JavaScript frontend, but there are no plans archivedfor this to happen in the foreseeable future.
+This may change to include a backend API and a JavaScript frontend, but there are no plans for this to happen in the foreseeable future.
 
 The Django project is stored under the `DigitalArchiveServer` directory.
 
@@ -48,8 +50,10 @@ It is served under `/`.
  - `/search` - A ListView that shows content that matches the relevant submitted query
 
 ### Archivers
-This directory contains the interfaces used to archive and store new content from the web.
-It is stored under `DigitalArchiveServer/ContentManager/Archivers`
+Content can be acquired and sorted automatically using different Archiver utilities.
+
+It is stored under `DigitalArchiveServer/ContentManager/Archivers`, and this directory contains the interfaces used to archive and store new content from the web.
+
 It is served under `/archivers`
 
 #### ArchiveWorkers
@@ -63,7 +67,9 @@ By default, this project comes with a single archive worker (GenericArchiveWorke
  - `/archivers/[archiver-codename]` - A view on that ArchiveWorker, allowing you to see the logs and request archival
 
 ### Users & Groups
-A basic user can only see non-adult content, with no benefits over non-logged-in users. Users mostly exist to be assigned to groups, and to track seen and liked content
+Users mostly exist to be assigned to groups, and for a individual to track content.
+
+A basic user can only see content not marked as adult. 
 
 There are two groups you can assign to users, Adult and Archivers.
 
@@ -77,5 +83,32 @@ There are two groups you can assign to users, Adult and Archivers.
 ##### Adult
 Assigning a user to this group means that they can access anything marked as adult content
 
-##### Archivers
-Archivers can access the archivers page and can execute orders to ArchiveWorkers to start archiving things
+##### Archivists
+Archivists can access the archivers page, it's utilities, and can execute orders to ArchiveWorkers.
+
+## Bug Reporting, Feature Requests, and Contributing
+If you encounter a bug, please report the issue on this repository's issues page.
+
+If you wish to request a feature, please open an issue and use the 'Feature Request' tag.
+
+There is currently no system in place to directly contribute code. (coming soon!)
+
+## License
+This project, and all files within, are licensed under the GNU General Public License version three or any later version (SPDX code GPL-3.0-or-later), as published by the Free Software Foundation.
+See LICENSE.
+
+Digital Archive Server
+Copyright (C) 2022-2023 Digital Archive Server Contributors (See CONTRIBUTORS.md)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.
