@@ -13,11 +13,6 @@ class Archiver(models.Model):
     related_types = models.TextField(default='')
     adult = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        # save the archiver, only allowing a single instance for each source (base_url)
-        self.__class__.objects.filter(base_url=self.base_url).delete()
-        super().save(*args, **kwargs)
-
     class Meta:
         permissions = [
             ('can_archive', 'Can order archival')
