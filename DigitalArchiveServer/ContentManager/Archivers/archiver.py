@@ -58,7 +58,7 @@ def scan_library_for_existing_content():
     for file in content_path.rglob('*'):
         # validate metafile
         # import metafile
-        if '.meta' in file.name:
+        if '.meta' == file.name:
             with open(file, 'r') as metafile:
                 metadata = json.loads(metafile.read())
                 lines.append(json.dumps(metadata, indent=4).replace('\n', '<br>') + '<br><br>')
