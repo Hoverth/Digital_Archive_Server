@@ -22,7 +22,7 @@ from ..models import Content, Archiver, Tag, Creator
 metadata_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Metafile",
-    "description": "A MDFDAS Compliant Metafile",
+    "description": "A Metadata JSON File Specification",
     "type": "object",
     "properties": {
         "title": {
@@ -256,11 +256,11 @@ class ArchiveWorker:
         else:
             new_content = Content()
 
-        new_content.title = metadata['title']
-        new_content.content_type = metadata['content-type']
-        new_content.source_url = metadata['source-url']
-        new_content.source_id = metadata['source-id']
-        new_content.content_path = metadata['content-path']
+        new_content.title = metadata['title'][:255]
+        new_content.content_type = metadata['content-type'][:255]
+        new_content.source_url = metadata['source-url'][:255]
+        new_content.source_id = metadata['source-id'][:255]
+        new_content.content_path = metadata['content-path'][:255]
         new_content.published_date = timezone.now()  # metadata['time-retrieved']  # this needs to be converted
 
         if 'notes' in metadata:
@@ -268,12 +268,12 @@ class ArchiveWorker:
         if 'time-created' in metadata:
             new_content.time_created = timezone.now()  # metadata['time-created']  # this also needs to be converted
         if 'language' in metadata:
-            new_content.language = metadata['language']
+            new_content.language = metadata['language'][:255]
         if 'copyright' in metadata:
-            new_content.copyright = metadata['copyright']
+            new_content.copyright = metadata['copyright'][:255]
 
-        new_content.content_size = pathlib.Path(STATIC_ROOT, metadata['content-path']).stat().st_size
-        new_content.preview = ArchiveWorker.make_preview(metadata['content-path'])
+        new_content.content_size = int(pathlib.Path(STATIC_ROOT, metadata['content-path']).stat().st_size)
+        new_content.preview = ArchiveWorker.make_preview(metadata['content-path'])[:512]
 
         new_content.from_archiver = self.get_model()
 
@@ -285,17 +285,17 @@ class ArchiveWorker:
                     new_creator = Creator.objects.filter(name=creator['creator-name']).first()
                 else:
                     new_creator = Creator()
-                new_creator.name = creator['creator-name']
+                new_creator.name = creator['creator-name'][:255]
                 if 'creator-id' in creator:
-                    new_creator.creator_id = creator['creator-id']
+                    new_creator.creator_id = creator['creator-id'][:255]
                 if 'creator-about' in creator:
                     new_creator.about = creator['creator-about']
                 if 'creator-source-url' in creator:
-                    new_creator.source_url = creator['creator-source-url']
+                    new_creator.source_url = creator['creator-source-url'][:255]
                 if 'creator-source-id' in creator:
-                    new_creator.source_id = creator['creator-source-id']
+                    new_creator.source_id = creator['creator-source-id'][:255]
                 if 'adult' in creator:
-                    new_creator.adult = creator['adult']
+                    new_creator.adult = bool(creator['adult'])
                 new_creator.save()
 
                 new_creator.from_archiver = self.get_model()
@@ -309,15 +309,15 @@ class ArchiveWorker:
                     new_tag = Tag.objects.filter(name=tag['tag-name']).first()
                 else:
                     new_tag = Tag()
-                new_tag.name = tag['tag-name']
+                new_tag.name = tag['tag-name'][:255]
                 if 'tag-id' in tag:
-                    new_tag.tag_id = tag['tag-id']
+                    new_tag.tag_id = tag['tag-id'][:255]
                 if 'tag-source-url' in tag:
-                    new_tag.source_url = tag['tag-source-url']
+                    new_tag.source_url = tag['tag-source-url'][:255]
                 if 'tag-source-id' in tag:
-                    new_tag.source_id = tag['tag-source-id']
+                    new_tag.source_id = tag['tag-source-id'][:255]
                 if 'adult' in tag:
-                    new_tag.adult = tag['adult']
+                    new_tag.adult = bool(tag['adult'])
                 new_tag.save()
 
                 new_tag.from_archiver = self.get_model()
@@ -357,7 +357,7 @@ class ArchiveWorker:
 
                     preview = lines
                     preview = '<p class=\'preview\'>' + str(preview) + '</p>'
-                    return preview
+                    return preview[:512]
 
             return '<p class=\'preview\'>This content has no generated preview</p>'
         else:
