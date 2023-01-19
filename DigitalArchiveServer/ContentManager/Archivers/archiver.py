@@ -23,12 +23,14 @@ def view_archive_tools(request):
         if 'scan-library' in request.POST:
             scan_library_for_existing_content.delay()
 
-    workers = archive_workers
+    workers = []
+    for archive_worker in archive_workers:
+        workers += {'name': archive_worker.name, 'codename': archive_worker.codename}
     if not request.user.has_perm('adult_content'):
         workers = []
         for archive_worker in archive_workers:
             if not archive_worker.adult:
-                workers.append(archive_worker)
+                workers += {'name': archive_worker.name, 'codename': archive_worker.codename}
 
     context = {
         'archivers': workers
