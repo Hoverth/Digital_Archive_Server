@@ -6,6 +6,22 @@ from .models import Content
 
 
 class SearchForm(forms.Form):
+    ORDER_BY = [
+        ('-time_retrieved', 'Time Retrieved (Descending)'),
+        ('time_retrieved', 'Time Retrieved (Ascending)'),
+        ('-published_date', 'Published Date (Descending)'),
+        ('published_date', 'Published Date (Ascending)'),
+        ('?', 'Random'),
+        ('title', 'Title (Ascending)'),
+        ('-title', 'Title (Descending)'),
+        ('source_url', 'Source Url (Ascending)'),
+        ('-source_url', 'Source Url (Descending)'),
+        ('content_path', 'Content Path (Ascending)'),
+        ('-content_path', 'Content Path (Descending)'),
+        ('content_type', 'Content Type (Ascending)'),
+        ('-content_type', 'Content Type (Descending)')
+    ]
+
     title = forms.CharField(required=False)
     content_type = forms.CharField(required=False)
     source_url = forms.CharField(required=False)
@@ -27,6 +43,8 @@ class SearchForm(forms.Form):
     from_archiver = forms.CharField(required=False)
     creator_names = forms.CharField(required=False)
     tag_names = forms.CharField(required=False)
+
+    order_by = forms.ChoiceField(choices=ORDER_BY, initial=1, required=False)
 
 
 class SearchView(generic.ListView):
@@ -81,6 +99,11 @@ class SearchView(generic.ListView):
                 else:
                     published_date_filter = Q()
 
+                order_by = '-time_retrieved'
+                if form.cleaned_data['order_by'] != '':
+                    order_by = form.cleaned_data['order_by']
+                print(order_by)
+
                 content_list = Content.objects.filter(
                     Q(title__icontains=title) &
                     Q(content_type__icontains=content_type) &
@@ -100,7 +123,7 @@ class SearchView(generic.ListView):
                     Q(from_archiver__name__icontains=from_archiver) &
                     Q(creators__name__icontains=creator_names) &
                     Q(tags__name__icontains=tag_names)
-                ).distinct().order_by('-time_retrieved')
+                ).distinct().order_by(order_by)
 
                 if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
                     content_list = content_list.exclude(tags__tag_id='adult-content')
