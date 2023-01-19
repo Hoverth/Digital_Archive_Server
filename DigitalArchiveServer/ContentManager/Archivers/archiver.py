@@ -55,29 +55,31 @@ def view_archiver(request, codename):
 def scan_library_for_existing_content():
     content_path = pathlib.Path(STATIC_ROOT)
     lines = []
-    for file in content_path.rglob('*'):
+    for file in content_path.rglob('*.meta'):
         # validate metafile
         # import metafile
-        if '.meta' == file.name:
-            with open(file, 'r') as metafile:
+        with open(file, 'r') as metafile:
+            try:
                 metadata = json.loads(metafile.read())
-                lines.append(json.dumps(metadata, indent=4).replace('\n', '<br>') + '<br><br>')
+            except json.JSONDecodeError:
+                continue
+            lines.append(json.dumps(metadata, indent=4).replace('\n', '<br>') + '<br><br>')
 
-            if ArchiveWorker.check_metadata(metadata):
-                content_path = str(file.parent).replace(STATIC_ROOT, '').strip('/')
-                if metadata['content-path'] is not content_path:
-                    metadata['content-path'] = content_path
+        if ArchiveWorker.check_metadata(metadata):
+            content_path = str(file.parent).replace(STATIC_ROOT, '').strip('/')
+            if metadata['content-path'] is not content_path:
+                metadata['content-path'] = content_path
 
-                # for archive_worker in archive_workers:
-                    # if archive_worker().base_url in metadata['source-url']:
-                        # archive_worker().get_content(metadata['source-url'])
-                    # else:
-                ArchiveWorker.ArchiveWorker().save_content(metadata)
-                print('saving:  ' + metadata['title'])
-                # if len(archive_workers) == 0:
-                #     ArchiveWorker.ArchiveWorker().save_content(metadata)
-            else:
-                lines.append('failed schema: ' + metadata['title'])
+            # for archive_worker in archive_workers:
+                # if archive_worker().base_url in metadata['source-url']:
+                    # archive_worker().get_content(metadata['source-url'])
+                # else:
+            ArchiveWorker.ArchiveWorker().save_content(metadata)
+            print('saving:  ' + metadata['title'])
+            # if len(archive_workers) == 0:
+            #     ArchiveWorker.ArchiveWorker().save_content(metadata)
+        else:
+            lines.append('failed schema: ' + metadata['title'])
 
     # generate tag & creator previews
     for tag in Tag.objects.order_by('name'):
