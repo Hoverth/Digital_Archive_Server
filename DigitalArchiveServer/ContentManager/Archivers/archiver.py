@@ -22,6 +22,8 @@ def view_archive_tools(request):
     if request.method == 'POST':
         if 'scan-library' in request.POST:
             scan_library_for_existing_content.delay()
+        if 'generate-previews' in request.POST:
+            generate_previews.delay()
 
     workers = archive_workers
     if not request.user.has_perm('adult_content'):
@@ -51,10 +53,25 @@ def view_archiver(request, codename):
     return response
 
 
+def log_print(message):
+    log_path = pathlib.Path(STATIC_ROOT)
+
+    log_path.mkdir(parents=True, exist_ok=True)
+    for parent_directory in reversed(pathlib.Path(log_path).parents):
+        parent_directory.mkdir(exist_ok=True, mode=0o777)
+
+    log_path = log_path / 'general_log.txt'
+
+    if not log_path.exists():
+        log_path.touch()
+
+    with log_path.open(mode='a') as log_file:
+        log_file.write(message + '\n')
+
+
 @shared_task
 def scan_library_for_existing_content():
     content_path = pathlib.Path(STATIC_ROOT)
-    lines = []
     for file in content_path.rglob('*.meta'):
         # validate metafile
         # import metafile
@@ -63,24 +80,38 @@ def scan_library_for_existing_content():
                 metadata = json.loads(metafile.read())
             except json.JSONDecodeError:
                 continue
-            lines.append(json.dumps(metadata, indent=4).replace('\n', '<br>') + '<br><br>')
 
         if ArchiveWorker.check_metadata(metadata):
             content_path = str(file.parent).replace(STATIC_ROOT, '').strip('/')
             if metadata['content-path'] is not content_path:
                 metadata['content-path'] = content_path
 
-            # for archive_worker in archive_workers:
-                # if archive_worker().base_url in metadata['source-url']:
-                    # archive_worker().get_content(metadata['source-url'])
-                # else:
-            ArchiveWorker.ArchiveWorker().save_content(metadata)
-            print('saving:  ' + metadata['title'])
-            # if len(archive_workers) == 0:
-            #     ArchiveWorker.ArchiveWorker().save_content(metadata)
-        else:
-            lines.append('failed schema: ' + metadata['title'])
+            saved_content = False
+            if len(archive_workers) != 0:
+                for archive_worker in archive_workers:
+                    if archive_worker().codename in metadata['content-type']:
+                        archive_worker().save_content(metadata)
 
+                        # perhaps this would work for a global setting
+                        # archive_worker().get_content(metadata['source-url'])
+
+                        saved_content = True
+                        break
+
+            if not saved_content:
+                ArchiveWorker.ArchiveWorker().save_content(metadata)
+
+            log_print('Saving: ' + str(content_path))
+
+        else:
+            log_print('Content metadata failed schema: ' + str(content_path))
+
+    generate_previews.delay()
+    log_print('\n Scanning Files Complete!\n')
+
+
+@shared_task
+def generate_previews():
     # generate tag & creator previews
     for tag in Tag.objects.order_by('name'):
         try:
@@ -89,7 +120,7 @@ def scan_library_for_existing_content():
         except (ValueError, AttributeError):
             tag.preview = '<p class=\'preview\'>This tag has no generated preview</p>'
             tag.save()
-    print('generated tag previews')
+    log_print('\nGenerated Tag previews')
 
     for creator in Creator.objects.order_by('name'):
         try:
@@ -99,7 +130,7 @@ def scan_library_for_existing_content():
         except (ValueError, AttributeError):
             creator.preview = '<p class=\'preview\'>This creator has no generated preview</p>'
             creator.save()
-    print('generated creator previews')
+    log_print('\nGenerated Creator previews')
 
 
 app_name = 'Archivers'
