@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.http import HttpResponseNotFound
 
+from celery import shared_task
+
 from . import ArchiveWorker, GenericArchiveWorker
 from ..settings import STATIC_ROOT
 from ..models import Content, Tag, Creator
@@ -19,7 +21,7 @@ def view_archive_tools(request):
         return redirect('/')
     if request.method == 'POST':
         if 'scan-library' in request.POST:
-            scan_library_for_existing_content()
+            scan_library_for_existing_content.delay()
 
     workers = archive_workers
     if not request.user.has_perm('adult_content'):
@@ -49,6 +51,7 @@ def view_archiver(request, codename):
     return response
 
 
+@shared_task
 def scan_library_for_existing_content():
     content_path = pathlib.Path(STATIC_ROOT)
     lines = []
