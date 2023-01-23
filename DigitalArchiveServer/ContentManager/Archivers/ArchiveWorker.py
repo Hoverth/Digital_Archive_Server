@@ -279,7 +279,7 @@ class ArchiveWorker:
 
         new_content.save()
 
-        if metadata['creators'] is not None:
+        if 'creators' in metadata and metadata['creators'] is not None:
             for creator in metadata['creators']:
                 if Creator.objects.filter(name=creator['creator-name']).exists():
                     new_creator = Creator.objects.filter(name=creator['creator-name']).first()
@@ -303,7 +303,7 @@ class ArchiveWorker:
 
                 new_content.creators.add(new_creator)
 
-        if metadata['tags'] is not None:
+        if 'tags' in metadata and metadata['tags'] is not None:
             for tag in metadata['tags']:
                 if Tag.objects.filter(name=tag['tag-name']).exists():
                     new_tag = Tag.objects.filter(name=tag['tag-name']).first()
