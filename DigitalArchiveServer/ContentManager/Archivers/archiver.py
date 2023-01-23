@@ -102,7 +102,7 @@ def scan_library_for_existing_content():
                         break
 
             if not saved_content:
-                ArchiveWorker.ArchiveWorker().save_content(metadata)
+                GenericArchiveWorker.GenericArchiveWorker().save_content(metadata)
 
             number_of_scanned_content += 1
             log_print(str(number_of_scanned_content).zfill(6) + ' : Saving: ' + str(content_path))
