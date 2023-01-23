@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Creator, Tag, Content, Collection
+from .models import Creator, Tag, Content, Collection, Archiver
 
 
 class ContentAdmin(admin.ModelAdmin):
@@ -13,3 +13,4 @@ admin.site.register(Tag)
 admin.site.register(Creator)
 admin.site.register(Content, ContentAdmin)
 admin.site.register(Collection)
+admin.site.register(Archiver)
