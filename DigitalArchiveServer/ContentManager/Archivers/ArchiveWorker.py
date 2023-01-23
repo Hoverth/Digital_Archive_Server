@@ -175,10 +175,10 @@ enabled_actions = [
 
 # this is the class that actually scrapes and builds the archive
 class ArchiveWorker:
-    name = ''
-    codename = ''
+    name = 'Base Archive Worker'
+    codename = 'base'
     base_url = ''
-    about = ''
+    about = 'The Base Class for ArchiveWorkers, this archiver should not show in the interface'
     adult = False
     enabled_actions = [
         'get_existing_remote_library',
