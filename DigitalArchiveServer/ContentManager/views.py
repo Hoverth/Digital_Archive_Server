@@ -49,6 +49,7 @@ class ContentDetailView(generic.DetailView):
                     content.save()
 
         image_types = ['.gif', '.jpg', '.png']
+        audio_types = ['.mp3', '.ogg', '.wav', '.flac', '.opus', '.aac']
         video_types = ['.mp4', '.mkv']
         text_types = ['.txt']
         iframe_types = ['.html', '.pdf']
@@ -73,6 +74,8 @@ class ContentDetailView(generic.DetailView):
 
                 if file_extension in image_types:
                     file_out['type'] = 'image'
+                elif file_extension in audio_types:
+                    file_out['type'] = 'audio'
                 elif file_extension in video_types:
                     file_out['type'] = 'video'
                 elif file_extension in iframe_types:
