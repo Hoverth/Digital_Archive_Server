@@ -71,6 +71,9 @@ def log_print(message):
 
 @shared_task
 def scan_library_for_existing_content():
+
+    number_of_scanned_content = 0
+
     content_path = pathlib.Path(STATIC_ROOT)
     for file in content_path.rglob('*.meta'):
         # validate metafile
@@ -101,7 +104,8 @@ def scan_library_for_existing_content():
             if not saved_content:
                 ArchiveWorker.ArchiveWorker().save_content(metadata)
 
-            log_print('Saving: ' + str(content_path))
+            number_of_scanned_content += 1
+            log_print(str(number_of_scanned_content).zfill(6) + ' : Saving: ' + str(content_path))
 
         else:
             log_print('Content metadata failed schema: ' + str(content_path))
