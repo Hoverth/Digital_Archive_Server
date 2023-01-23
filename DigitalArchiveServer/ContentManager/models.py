@@ -18,6 +18,9 @@ class Archiver(models.Model):
             ('can_archive', 'Can order archival')
         ]
 
+    def __str__(self):
+        return str(self.codename) + '  //  ' + str(self.name)
+
 
 # Content Models
 
