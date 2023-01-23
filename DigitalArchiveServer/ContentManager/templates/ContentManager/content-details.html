@@ -7,7 +7,7 @@
 {% block content %}{% if content %}<h1>{{ content.title }}</h1>
 <p>
     Content type: {{ content.content_type }} <br/>
-    Source URL: {{ content.source_url }} <br/>
+    Source URL: <a href="{{ content.source_url }}">{{ content.source_url }}</a> <br/>
     Source ID: {{ content.source_id }} <br/>
     Creators: {% for creator in content.creators.all %}<a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>,
     {% empty %}<a href="{% url 'ContentManager:nocreator' %}">No Creators</a>{% endfor %}<br/>
