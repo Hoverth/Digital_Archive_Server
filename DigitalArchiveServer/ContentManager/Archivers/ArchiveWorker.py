@@ -405,6 +405,8 @@ class ArchiveWorker:
         return True
 
     def log_print(self, message):
+        print(message)
+
         log_path = pathlib.Path(STATIC_ROOT, self.codename)
 
         log_path.mkdir(parents=True, exist_ok=True)
