@@ -28,7 +28,7 @@ DEBUG = int(os.environ.get("DEBUG", default=False))  # True
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")  # ['*']
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337", "http://localhost:1338"]  # trust from the proxy
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")  # trust from the proxy
 
 # Application definition
 
