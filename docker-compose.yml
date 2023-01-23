@@ -20,7 +20,6 @@ services:
       - ./.env.db
   rabbitmq:
     image: rabbitmq:3.11-alpine
-    container_name: rabbitmq
     env_file:
       - ./.env
     ports:
@@ -40,7 +39,6 @@ services:
   web:
     build: .
     command: gunicorn DigitalArchiveServer.wsgi:application --bind 0.0.0.0:8000
-    container_name: django_web
     environment:
       - DATABASE_URL
     volumes:
