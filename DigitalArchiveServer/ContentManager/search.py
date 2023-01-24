@@ -114,7 +114,6 @@ class SearchView(generic.ListView):
                 if from_archiver != '':
                     q_list.append(Q(tags__name__icontains=tag_names))
 
-
                 if content_size is not None:
                     q_list.append(Q(content_size__gt=(content_size - 50)) & Q(content_size__lt=(content_size + 50)))
 
