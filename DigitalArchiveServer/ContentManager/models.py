@@ -101,6 +101,7 @@ class Collection(models.Model):
     related_collections = models.ManyToManyField('self', blank=True)
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This collection has no generated preview</p>')
     adult = models.BooleanField(default=False)
+    search = models.JSONField(null=True)
 
     def __str__(self):
         return str(self.name)

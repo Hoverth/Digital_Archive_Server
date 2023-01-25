@@ -7,10 +7,12 @@
 
 {% block content %}
     <form action="" method="get">
-        <table>
-            {{ form.as_p }}
-        </table>
+        {{ form.as_p }}
         <input type="submit" value="Submit">
+        {% if request.user.is_authenticated %}
+        {{ collection_form.as_p }}
+        <input type="submit" value="Create collection based on search">
+        {% endif %}
     </form>
     <br>
     <div class="item-container">

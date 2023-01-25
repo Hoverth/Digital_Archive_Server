@@ -17,7 +17,7 @@
         {% empty %}None{% endfor %}
     </p>
     <div class="item-container">
-        {% for content in collection.content.all %}
+        {% for content in content_list %}
             <div class="item">
                 <a href="{% url 'ContentManager:content' content.id %}">
                     {{ content.preview|safe }}

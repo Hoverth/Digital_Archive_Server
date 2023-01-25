@@ -3,6 +3,8 @@ import pathlib
 import django.contrib.auth.models
 from .models import Creator, Tag, Content, Collection
 from .settings import STATIC_ROOT
+from .search import get_content_from_search
+
 from django.views import generic
 
 
@@ -207,7 +209,13 @@ class CollectionDetailsView(generic.ListView):
     paginate_by = 20
 
     def get_queryset(self, **kwargs):
-        content_list = Content.objects.filter(tags__id=self.kwargs['pk']).order_by('-time_retrieved')
+        collection = Collection.objects.filter(id=self.kwargs['pk']).first()
+
+        content_list = Content.objects.filter(collection_content=collection).order_by('-time_retrieved')
+
+        if collection.search is not None:
+            content_list = content_list.union(get_content_from_search(collection.search))
+
         if not self.request.user.is_authenticated or not self.request.user.has_perm('ContentManager.adult_content'):
             content_list = content_list.exclude(tags__tag_id='adult-content')
 
