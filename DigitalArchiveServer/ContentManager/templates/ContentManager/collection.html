@@ -23,8 +23,8 @@
                     {{ content.preview|safe }}
                     <p class="centered">{{ content.title }}</p>
                 </a>
-                <p class="centered" class="collections">
-                    {% for collection in content.collections.all %}
+                <p class="centered" class="creators">
+                    {% for creator in content.creators.all %}
                         <a href="{% url 'ContentManager:creator' creator.id %}">{{ creator.name }}</a>
                     {% empty %}
                         <a href="{% url 'ContentManager:nocreator' %}">No Creators</a>
