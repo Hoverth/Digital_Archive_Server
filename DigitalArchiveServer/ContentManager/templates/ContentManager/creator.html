@@ -12,7 +12,11 @@
         Source URL: {{ creator.source_url}} <br>
         Source ID: {{ creator.source_id }} <br>
         {% if creator.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' creator.from_archiver.codename %}">{{ creator.from_archiver.name }}</a><br>{% endif %}
-        {% if creator.adult %}Adult Creator{% endif %}
+        {% if creator.adult %}Adult Creator<br>{% endif %}
+        <br>
+        {% if user.is_authenticated and perms.ContentManager.change_creator %}
+            <a href="{% url 'admin:ContentManager_creator_change' creator.id %}">Edit Creator</a>
+        {% endif %}
     </p>
     {% if creator.about != '' %}
     <h2>About</h2>

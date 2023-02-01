@@ -35,7 +35,8 @@ CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")  # trus
 INSTALLED_APPS = [
     'ContentManager.apps.ContentManagerConfig',
     'Users.apps.UsersConfig',
-    'django.contrib.admin',
+    'DigitalArchiveServer.apps.CustomAdminConfig',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

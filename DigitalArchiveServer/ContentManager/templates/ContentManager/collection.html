@@ -15,6 +15,9 @@
         Related Collections: {% for related_collection in collection.related_collections.all %}
         <a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>,
         {% empty %}None{% endfor %}
+        {% if user.is_authenticated and perms.ContentManager.change_collection and user in collection.owners.all %}
+            <a href="{% url 'admin:ContentManager_collection_change' collection.id %}">Edit Collection</a>
+        {% endif %}
     </p>
     <div class="item-container">
         {% for content in content_list %}

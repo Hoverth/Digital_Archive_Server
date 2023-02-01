@@ -25,7 +25,11 @@
     Content Copyright: {{ content.copyright }} <br/>
     Related Content: {% for content in content.related_content.all %}<a href="{% url 'ContentManager:content' content.id %}">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}<br>
     In Collections: {% for collection in content.collection_content.all %}<a href="{% url 'ContentManager:collection' collection.id %}">{{ collection.name }}</a>, {% empty %}None{% endfor %}<br>
-    {% if content.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' content.from_archiver.codename %}">{{ content.from_archiver.name }}</a>{% endif %}
+    {% if content.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' content.from_archiver.codename %}">{{ content.from_archiver.name }}</a><br>{% endif %}
+    <br>
+    {% if user.is_authenticated and perms.ContentManager.change_content %}
+        <a href="{% url 'admin:ContentManager_content_change' content.id %}">Edit Content</a>
+    {% endif %}
 </p>
 <hr>
 {% for file in files %}
