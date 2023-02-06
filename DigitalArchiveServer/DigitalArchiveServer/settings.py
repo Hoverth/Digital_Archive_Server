@@ -26,9 +26,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")  # 'django-insecure-odbv4q^kejk3r!2&!z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=False))  # True
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")  # ['*']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost 127.0.0.1 [::1]').split(" ")  # ['*']
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")  # trust from the proxy
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", 'http://localhost:1337 http://localhost:1338').split(" ")  # trust from the proxy
 
 # Application definition
 
@@ -137,6 +137,6 @@ STATIC_ROOT = "/home/digital-archive-server/static"
 
 LOGIN_REDIRECT_URL = '/'
 
-CELERY_BROKER_URL = 'amqp://' + os.environ.get('RABBITMQ_DEFAULT_USER') + ':' + os.environ.get('RABBITMQ_DEFAULT_PASS') + '@rabbitmq:5672/'
+CELERY_BROKER_URL = 'amqp://' + os.environ.get('RABBITMQ_DEFAULT_USER', 'archiver') + ':' + os.environ.get('RABBITMQ_DEFAULT_PASS', 'archiver') + '@rabbitmq:5672/'
 
 CELERY_TASK_SERIALIZER = 'json'
