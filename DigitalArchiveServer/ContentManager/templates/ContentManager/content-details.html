@@ -20,7 +20,8 @@
     Time Retrieved: {{ content.time_retrieved }}<br/>
     Published on: {{ content.published_date }} <br/>
     Last Modified: {{ content.last_modified_date }} <br/>
-    Notes: {{ content.notes|safe }}<br/>
+    Notes:<br/>
+    {{ content.notes|safe }}<br/>
     Content Language: {{ content.language }} <br/>
     Content Copyright: {{ content.copyright }} <br/>
     Related Content: {% for content in content.related_content.all %}<a href="{% url 'ContentManager:content' content.id %}">{{ content.title }}</a>, {% empty %}No Related Content{% endfor %}<br>
