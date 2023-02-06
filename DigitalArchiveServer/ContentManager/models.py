@@ -27,14 +27,14 @@ class Archiver(models.Model):
 class Tag(models.Model):
     # Standard Fields
     name = models.CharField(max_length=255)
-    tag_id = models.CharField(max_length=255, default='')
-    source_url = models.CharField(max_length=255, default='')
-    source_id = models.CharField(max_length=255, default='')
-    adult = models.BooleanField(default=False)
+    tag_id = models.CharField(max_length=255, default='', blank=True)
+    source_url = models.CharField(max_length=255, default='', blank=True)
+    source_id = models.CharField(max_length=255, default='', blank=True)
+    adult = models.BooleanField(default=False, blank=True)
 
     # Additional Fields
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This tag has no generated preview</p>')
-    from_archiver = models.ForeignKey(Archiver, on_delete=models.CASCADE, null=True)
+    from_archiver = models.ForeignKey(Archiver, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.tag_id) + '  //  ' + str(self.name)
@@ -43,16 +43,16 @@ class Tag(models.Model):
 class Creator(models.Model):
     # Standard Fields
     name = models.CharField(max_length=255)
-    creator_id = models.CharField(max_length=255, default='')
-    about = models.TextField(default='')
-    source_url = models.CharField(max_length=255, default='')
-    source_id = models.CharField(max_length=255, default='')
-    adult = models.BooleanField(default=False)
+    creator_id = models.CharField(max_length=255, default='', blank=True)
+    about = models.TextField(default='', blank=True)
+    source_url = models.CharField(max_length=255, default='', blank=True)
+    source_id = models.CharField(max_length=255, default='', blank=True)
+    adult = models.BooleanField(default=False, blank=True)
 
     # Additional Fields
     related_creators = models.ManyToManyField('self', blank=True)
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This creator has no generated preview</p>')
-    from_archiver = models.ForeignKey(Archiver, on_delete=models.CASCADE, null=True)
+    from_archiver = models.ForeignKey(Archiver, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.creator_id) + '  //  ' + str(self.name)
@@ -95,13 +95,13 @@ class Content(models.Model):
 class Collection(models.Model):
     name = models.CharField(max_length=255, default='Collection')
     owners = models.ManyToManyField(User, related_name='collection_owners')
-    restricted_access = models.BooleanField(default=False)
+    restricted_access = models.BooleanField(default=False, blank=True)
     can_access = models.ManyToManyField(User, related_name='collection_can_access', blank=True)
-    content = models.ManyToManyField(Content, related_name='collection_content')
+    content = models.ManyToManyField(Content, related_name='collection_content', blank=True)
     related_collections = models.ManyToManyField('self', blank=True)
     preview = models.CharField(max_length=512, default='<p class=\'preview\'>This collection has no generated preview</p>')
-    adult = models.BooleanField(default=False)
-    search = models.JSONField(null=True)
+    adult = models.BooleanField(default=False, blank=True)
+    search = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
