@@ -390,7 +390,7 @@ class ArchiveWorker:
                             return 1
 
                 # if the remote server file is not the same size as the local file is, return error
-                if int(r.headers.get('content-length', None)) != pathlib.Path(filename).stat().st_size:
+                if int(r.headers.get('content-length', -1)) != pathlib.Path(filename).stat().st_size:
                     return 1
 
         return 0
