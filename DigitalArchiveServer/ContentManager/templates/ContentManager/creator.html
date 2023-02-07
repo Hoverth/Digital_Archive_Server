@@ -9,7 +9,7 @@
     <h1>{{ creator.name }}</h1>
     <p>
         Creator ID: {{ creator.tag_id }} <br>
-        Source URL: {{ creator.source_url}} <br>
+        Source URL: <a href="{{ creator.source_url }}">{{ creator.source_url }}</a> <br>
         Source ID: {{ creator.source_id }} <br>
         {% if creator.from_archiver is not None %}Collected by archiver: <a href="{% url 'ContentManager:Archivers:archiver' creator.from_archiver.codename %}">{{ creator.from_archiver.name }}</a><br>{% endif %}
         {% if creator.adult %}Adult Creator<br>{% endif %}
