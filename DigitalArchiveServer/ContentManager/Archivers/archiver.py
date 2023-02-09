@@ -116,6 +116,11 @@ def scan_library_for_existing_content():
 
 @shared_task
 def generate_previews():
+    for content in Content.objects.order_by('title'):
+        if content.preview == '<p class=\'preview\'>This content has no generated preview</p>':
+            content.preview = ArchiveWorker.ArchiveWorker.make_preview(content.content_path)
+            content.save()
+
     # generate tag & creator previews
     for tag in Tag.objects.order_by('name'):
         try:

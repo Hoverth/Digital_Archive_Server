@@ -12,6 +12,7 @@
 <form action="" method="POST">
 {% csrf_token %}
 <button type="submit" name="scan-library">Scan Library</button>
+<button type="submit" name="generate-previews">(Re)Generate Previews</button>
 </form>
 <br>
 <iframe src="/static/general_log.txt" width="1600" height="500" frameBorder="0"></iframe>
