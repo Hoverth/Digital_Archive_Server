@@ -1,3 +1,4 @@
+import subprocess
 import requests
 import pathlib
 import time
@@ -338,6 +339,19 @@ class ArchiveWorker:
                     continue
                 if file.name == '.metafile':
                     continue
+
+                if file.suffix in video_types:
+                    result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                             "format=duration", "-of",
+                                             "default=noprint_wrappers=1:nokey=1", file],
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.STDOUT)
+                    video_duration = float(result.stdout) / 6  # gets a thumbnail from the first sixth of the video
+
+                    output_file = file.parent / pathlib.Path('.thumbnail-' + str(file.name).replace(file.suffix, '.png'))
+                    subprocess.call(['ffmpeg', '-y', '-i', file, '-ss', '00:00:' + str(video_duration), '-vframes', '1', output_file])
+                    return '<img class=\'preview\' src=\'/' + \
+                        str(output_file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
 
                 if file.suffix in image_types:
                     return '<img class=\'preview\' src=\'/' + \
