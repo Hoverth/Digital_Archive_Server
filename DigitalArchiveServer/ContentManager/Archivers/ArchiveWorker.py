@@ -340,19 +340,6 @@ class ArchiveWorker:
                 if file.name == '.metafile':
                     continue
 
-                if file.suffix in video_types:
-                    result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
-                                             "format=duration", "-of",
-                                             "default=noprint_wrappers=1:nokey=1", file],
-                                            stdout=subprocess.PIPE,
-                                            stderr=subprocess.STDOUT)
-                    video_duration = float(result.stdout) / 6  # gets a thumbnail from the first sixth of the video
-
-                    output_file = file.parent / pathlib.Path('.thumbnail-' + str(file.name).replace(file.suffix, '.png'))
-                    subprocess.call(['ffmpeg', '-y', '-i', file, '-ss', '00:00:' + str(video_duration), '-vframes', '1', output_file])
-                    return '<img class=\'preview\' src=\'/' + \
-                        str(output_file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
-
                 if file.suffix in image_types:
                     return '<img class=\'preview\' src=\'/' + \
                         str(file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
@@ -372,6 +359,26 @@ class ArchiveWorker:
                     preview = lines
                     preview = '<p class=\'preview\'>' + str(preview) + '</p>'
                     return preview[:512]
+
+            for file in content_path.iterdir():  # videos get less priority, so that processing is saved
+                if file.is_dir():
+                    continue
+
+                if file.name == '.metafile':
+                    continue
+
+                if file.suffix in video_types:
+                    result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                             "format=duration", "-of",
+                                             "default=noprint_wrappers=1:nokey=1", file],
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.STDOUT)
+                    video_duration = float(result.stdout) / 6  # gets a thumbnail from the first sixth of the video
+
+                    output_file = file.parent / pathlib.Path('.thumbnail-' + str(file.name).replace(file.suffix, '.png'))
+                    subprocess.call(['ffmpeg', '-y', '-i', file, '-ss', '00:00:' + str(video_duration), '-vframes', '1', output_file])
+                    return '<img class=\'preview\' src=\'/' + \
+                        str(output_file).replace(STATIC_ROOT, STATIC_URL).replace('//', '/') + '\'/>'
 
             return '<p class=\'preview\'>This content has no generated preview</p>'
         else:
