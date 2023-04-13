@@ -1,4 +1,9 @@
 # Digital Archive Server
+
+## -- This project is on indefinite haitus --
+I leaving this project up, though I will likely never touch it again.
+
+
 ### !! STILL UNDER ACTIVE DEVELOPMENT; STABILITY IS NOT ASSURED !!
 ##### Backing up archived data to a directory unavailable to the Digital Archive Server is recommended to avoid corruption or accidental deletion
 
